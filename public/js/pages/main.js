@@ -1,43 +1,136 @@
-$(document).ready(function () {
-    function injectSvgSprite(path) {
+(function ($) {
+    "use strict";
 
-        let ajax = new XMLHttpRequest();
-        ajax.open("GET", path, true);
-        ajax.send();
-        ajax.onload = function (e) {
-            let div = document.createElement("div");
-            div.className = 'd-none';
-            div.innerHTML = ajax.responseText;
-            document.body.insertBefore(div, document.body.childNodes[0]);
+    // Sticky Navbar
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 40) {
+            $('.navbar').addClass('sticky-top');
+        } else {
+            $('.navbar').removeClass('sticky-top');
         }
-    }
-
-    $("#alert-success").fadeTo(2000, 500).slideUp(500, function() {
-        $("#alert-success").slideUp(500);
-        $("#alert-success").removeClass("d-block").addClass("d-none");
+    });
+    
+    // Dropdown on mouse hover
+    $(document).ready(function () {
+        function toggleNavbarMethod() {
+            if ($(window).width() > 992) {
+                $('.navbar .dropdown').on('mouseover', function () {
+                    $('.dropdown-toggle', this).trigger('click');
+                }).on('mouseout', function () {
+                    $('.dropdown-toggle', this).trigger('click').blur();
+                });
+            } else {
+                $('.navbar .dropdown').off('mouseover').off('mouseout');
+            }
+        }
+        toggleNavbarMethod();
+        $(window).resize(toggleNavbarMethod);
     });
 
-    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
 
-    let countDownDate = new Date("Dec 28, 2021 12:00:00").getTime();
-    let x = setInterval(function () {
-        let now = new Date().getTime();
-        let distance = countDownDate - now;
-        let days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    // Modal Video
+    $(document).ready(function () {
+        var $videoSrc;
+        $('.btn-play').click(function () {
+            $videoSrc = $(this).data("src");
+        });
+        console.log($videoSrc);
 
-        document.getElementById("button-countdown-days").textContent = days + ' ngày';
-        document.getElementById("button-countdown-hours").textContent = hours + ' giờ';
-        document.getElementById("button-countdown-mins").textContent = minutes + ' phút';
-        document.getElementById("button-countdown-seconds").textContent = seconds + ' giây';
+        $('#videoModal').on('shown.bs.modal', function (e) {
+            $("#video").attr('src', $videoSrc + "?autoplay=1&amp;modestbranding=1&amp;showinfo=0");
+        })
 
-        if (distance < 0) {
-            clearInterval(x);
-            document.getElementById("button-countdown-days").textContent = 0 + 'ngày';
-            document.getElementById("button-countdown-hours").textContent = 0 + 'giờ';
-            document.getElementById("button-countdown-mins").textContent = 0 + 'phút';
+        $('#videoModal').on('hide.bs.modal', function (e) {
+            $("#video").attr('src', $videoSrc);
+        })
+    });
+    
+    
+    // Back to top button
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 100) {
+            $('.back-to-top').fadeIn('slow');
+        } else {
+            $('.back-to-top').fadeOut('slow');
         }
-    }, 1000);
-})
+    });
+    $('.back-to-top').click(function () {
+        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        return false;
+    });
+
+
+    // Product carousel
+    $(".product-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        margin: 45,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="bi bi-arrow-left"></i>',
+            '<i class="bi bi-arrow-right"></i>'
+        ],
+        responsive: {
+            0:{
+                items:1
+            },
+            768:{
+                items:2
+            },
+            992:{
+                items:3
+            },
+            1200:{
+                items:4
+            }
+        }
+    });
+
+
+    // Team carousel
+    $(".team-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        margin: 45,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="bi bi-arrow-left"></i>',
+            '<i class="bi bi-arrow-right"></i>'
+        ],
+        responsive: {
+            0:{
+                items:1
+            },
+            768:{
+                items:2
+            },
+            992:{
+                items:3
+            },
+            1200:{
+                items:4
+            }
+        }
+    });
+
+
+    // Testimonials carousel
+    $(".testimonial-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        items: 1,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText : [
+            '<i class="bi bi-arrow-left"></i>',
+            '<i class="bi bi-arrow-right"></i>'
+        ],
+    });
+    
+})(jQuery);
+

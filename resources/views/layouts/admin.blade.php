@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ config('app.name', 'Bus Ticket') }}</title>
+  <title>{{ config('app.name', 'Doctreat') }}</title>
 
   <!-- Core Css -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback" />
@@ -89,7 +89,7 @@
     <!-- Brand Logo -->
     <a href="/admin/dashboard" class="brand-link">
       <img src="{{ URL::to('img/logo_icon.ico') }}" class="brand-image img-circle elevation-3" style="opacity: .8">
-      <span class="brand-text font-weight-light">Bus Ticket</span>
+      <span class="brand-text font-weight-light">Doctreat</span>
     </a>
 
     <!-- Sidebar -->
@@ -234,7 +234,7 @@
 
   <!-- Main Footer -->
   <footer class="main-footer">
-    <strong>Bản quyền &copy; 2021 <a href="/admin/dashboard/">Bus Ticket</a>.</strong>
+    <strong>Bản quyền &copy; 2021 <a href="/admin/dashboard/">Doctreat</a>.</strong>
     Đã đăng ký bản quyền
     <div class="float-right d-none d-sm-inline-block">
       <b>Version</b> 1.0.0

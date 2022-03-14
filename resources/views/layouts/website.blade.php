@@ -4,95 +4,68 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{ config('app.name', 'Bus Ticket') }}</title>
+    <title>{{ config('app.name', 'Doctreat') }}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
-    <!-- Google fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700">
-    <!-- Swiper slider-->
-    <link rel="stylesheet" href="plugins/swiper/swiper-bundle.min.css">
-    <!-- Choices.js [Custom select]-->
-    <link rel="stylesheet" href="plugins/choices.js/public/assets/styles/choices.css">
-    <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet'>
-    <!-- Theme stylesheet-->
-   
-    <link rel="stylesheet" href="css/universal/style.default.css" id="theme-stylesheet">
-    <link rel="stylesheet" href="css/pages/main.css" id="theme-stylesheet">
-    <!-- Custom stylesheet - for your changes-->
-    <link rel="stylesheet" href="css/universal/custom.css">
-    <link rel="stylesheet" href="{{ mix('css/app.css') }}">
-    <!-- Favicon and apple touch icons-->
-    <link rel="icon" href="{{ URL::to('img/logo_icon.ico') }}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="{{ mix('js/app.js') }}" defer></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    </script>
-    <!-- Tweaks for older IEs-->
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&family=Roboto:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
 
 </head>
 
 <body>
     <div class="wide" id="all">
-        <!-- Top bar-->
-        <div class="top-bar py-2" id="topBar" style="background: rgba(0, 97, 197, 0.11)">
-            <div class="container px-lg-0 text-light py-1">
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-4 d-md-block d-none">
-                        <p class=" text_custom text-danger" style="margin-top: 17px;margin-left: -36px">SIÊU SALE 27.12 SẼ KẾT THÚC SAU</p>
+        <!-- Topbar Start -->
+        <div class="container-fluid border-bottom d-none d-lg-block">
+            <div class="row gx-0">
+                <div class="col-lg-4 text-center py-2">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="bi bi-geo-alt fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="text-uppercase mb-1">Our Office</h6>
+                            <span>123 Street, New York, USA</span>
+                        </div>
                     </div>
-                    <div class="col-md-5 d-md-block d-none" style="margin-left: -126px;" id="count-down-time">
-                        <button type="button" class="btn btn-outline-secondary" id="button-countdown-days"></button>
-                        <button type="button" class="btn btn-outline-secondary" id="button-countdown-hours"></button>
-                        <button type="button" class="btn btn-outline-secondary" id="button-countdown-mins"></button>
-                        <button type="button" class="btn btn-outline-secondary" id="button-countdown-seconds"></button>
+                </div>
+                <div class="col-lg-4 text-center border-start border-end py-2">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="text-uppercase mb-1">Email Us</h6>
+                            <span>info@example.com</span>
+                        </div>
                     </div>
-                    <div class="col-md-3" style="margin-left:126px">
-                        <div class="d-flex justify-content-md-end justify-content-between">
-                            <ul class="list-inline d-block d-md-none mb-0">
-                                <li class="list-inline-item"><a class="text-xs" href="#"><i class="fa fa-phone"></i></a></li>
-                                <li class="list-inline-item"><a class="text-xs" href="#"><i class="fa fa-envelope"></i></a></li>
-                            </ul>
-                            @if (Route::has('login'))
-                            <ul class="list-inline mb-0">
-                                @auth
-                                <li class="list-inline-item text-danger">
-                                    <div class="user-panel d-flex">
-                                        <div class="info dropdown">
-                                            <a class="d-block dropdown-toggle nav-link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ Auth::user()->name }}</a>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" href="/profile">Hồ sơ</a>
-                                                <form method="POST" action="{{ route('logout') }}">
-                                                    @csrf
-                                                    <button class="dropdown-item">{{ __('Đăng xuất') }}</button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                @else
-                                <li class="list-inline-item text-danger"><a href="{{ route('login') }}" class="text-xs text-uppercase fw-bold text-reset"><i class="fas fa-door-open me-2"></i><span class="d-none d-md-inline-block ">Đăng nhập</span></a></li>
-                                @if (Route::has('register'))
-                                <li class="list-inline-item text-danger"><a href="{{ route('register') }}" class="text-xs text-uppercase fw-bold text-reset"><i class="fas fa-user me-2"></i><span class="d-none d-md-inline-block">Đăng ký</span></a></li>
-                                @endif
-                                @endauth
-                            </ul>
-                            @endif
+                </div>
+                <div class="col-lg-4 text-center py-2">
+                    <div class="d-inline-flex align-items-center">
+                        <i class="bi bi-phone-vibrate fs-1 text-primary me-3"></i>
+                        <div class="text-start">
+                            <h6 class="text-uppercase mb-1">Call Us</h6>
+                            <span>+012 345 6789</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="top-bar py-2" id="topBar" style="background: rgb(255, 197, 47);height: 40px;">
-            <div class="container px-lg-0 text-light py-1">
-                <div class="row d-flex align-items-center">
-                    <div class="col-md-12 d-md-block d-none">
-                        <p class=" text_custom text-danger" style="text-align: center;font-size: 14px;">Cập nhật các thông tin mới nhất về dịch Covid-19 trước khi di chuyển. <a href="https://covid19.gov.vn/">Xem chi tiết...</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Top bar end-->
+        <!-- Topbar End -->
+
         <div class="alert mb-3 alert-success d-none" role="alert" id="alert-thank"> <strong>Cám ơn! </strong> Chúng tôi sẽ trả lời trong thời gian sớm nhất.</div>
         <div class="alert mb-3 alert-success d-none" role="alert" id="alert-ticket"></div>
         @if(session('success'))
@@ -101,23 +74,35 @@
 
         <!-- Navbar Sticky-->
         <header class="nav-holder make-sticky">
-            <div class="navbar navbar-light bg-white navbar-expand-lg py-0" id="navbar">
-                <div class="container py-3 py-lg-0 px-lg-0">
-                    <!-- Navbar brand--><a class="navbar-brand" href="/">
-                        <img class="d-none d-md-inline-block" src="img/logo-removebg.png" style="max-width: 45%;height: auto;margin-left: -98px;"><span class="sr-only">Bus Ticket - về trang chủ</span></a>
-                    <!-- Navbar toggler-->
-                    <button class="navbar-toggler text-primary border-primary" type="button" data-bs-toggle="collapse" data-bs-target="#navigationCollapse" aria-controls="navigationCollapse" aria-expanded="false" aria-label="Toggle navigation"><span class="sr-only">Thu gọn</span><i class="fas fa-align-justify"></i></button>
-                    <!-- Collapsed Navigation    -->
-                    <div class="collapse navbar-collapse" id="navigationCollapse">
-                        <ul class="navbar-nav ms-auto mb-6 mb-lg-0">
-                            <li class="nav-item dropdown"><a class="nav-link" href="/">Trang chủ</a></li>
-                            <li class="nav-item"><a class="nav-link" id="contactMegamenu" href="/rentcar">Thuê xe</a>
-                            <li class="nav-item"><a class="nav-link" id="contactMegamenu" href="/partner">Trở thành đối tác</a>
-                            <li class="nav-item"><a class="nav-link" id="contactMegamenu" href="/contact">Liên hệ</a>
-                        </ul>
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand-lg bg-white navbar-light shadow-sm py-3 py-lg-0 px-3 px-lg-0">
+                <a href="index.html" class="navbar-brand ms-lg-5">
+                    <h1 class="m-0 text-uppercase text-dark"><i class="bi bi-shop fs-1 text-primary me-3"></i>Pet Shop</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto py-0">
+                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="about.html" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Service</a>
+                        <a href="product.html" class="nav-item nav-link">Product</a>
+                        <div class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+                            <div class="dropdown-menu m-0">
+                                <a href="price.html" class="dropdown-item">Pricing Plan</a>
+                                <a href="team.html" class="dropdown-item">The Team</a>
+                                <a href="testimonial.html" class="dropdown-item">Testimonial</a>
+                                <a href="blog.html" class="dropdown-item">Blog Grid</a>
+                                <a href="detail.html" class="dropdown-item">Blog Detail</a>
+                            </div>
+                        </div>
+                        <a href="contact.html" class="nav-item nav-link nav-contact bg-primary text-white px-5 ms-lg-5">Contact <i class="bi bi-arrow-right"></i></a>
                     </div>
                 </div>
-            </div>
+            </nav>
+            <!-- Navbar End -->
         </header>
 
         <div>
@@ -125,56 +110,96 @@
         </div>
 
         <footer>
-            <!-- MAIN FOOTER-->
-            <div class="bg-gray-700 text-white">
-                <div class="container py-4">
-                    <div class="row gy-2">
-                        <div class="col-lg-6">
-                            <h4 class="mb-3 text-uppercase">Về chúng tôi</h4>
-                            <p class="text-sm mb-3 text-gray-500">Chúng tôi muốn phát triển 1 hệ thống bán vé chuyên nghiệp nhất Việt Nam. Đó là </p>
-                            <hr>
-                            <h4 class="h6 text-uppercase mt-2">Đăng ký để nhận thêm thông tin!</h4>
-                            <form id="send-mail-only-footer">
-                                <div class="input-group border mb-3">
-                                    <input class="form-control bg-none border-0 shadow-0 text-white" type="email" placeholder="Email address" aria-label="Email address" aria-describedby="button-submit">
-                                    <button class="btn btn-outline-light bg-none border-0" id="button-submit" type="button"><i class="fas fa-paper-plane"></i></button>
+            <!-- Footer Start -->
+            <div class="container-fluid bg-light mt-5 py-5">
+                <div class="container pt-5">
+                    <div class="row g-5">
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Get In Touch</h5>
+                            <p class="mb-4">No dolore ipsum accusam no lorem. Invidunt sed clita kasd clita et et dolor sed dolor</p>
+                            <p class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i>123 Street, New York, USA</p>
+                            <p class="mb-2"><i class="bi bi-envelope-open text-primary me-2"></i>info@example.com</p>
+                            <p class="mb-0"><i class="bi bi-telephone text-primary me-2"></i>+012 345 67890</p>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Quick Links</h5>
+                            <div class="d-flex flex-column justify-content-start">
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                                <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Popular Links</h5>
+                            <div class="d-flex flex-column justify-content-start">
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Home</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>About Us</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Our Services</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Meet The Team</a>
+                                <a class="text-body mb-2" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Latest Blog</a>
+                                <a class="text-body" href="#"><i class="bi bi-arrow-right text-primary me-2"></i>Contact Us</a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Newsletter</h5>
+                            <form action="">
+                                <div class="input-group">
+                                    <input type="text" class="form-control p-3" placeholder="Your Email">
+                                    <button class="btn btn-primary">Sign Up</button>
                                 </div>
                             </form>
+                            <h6 class="text-uppercase mt-4 mb-3">Follow Us</h6>
+                            <div class="d-flex">
+                                <a class="btn btn-outline-primary btn-square me-2" href="#"><i class="bi bi-twitter"></i></a>
+                                <a class="btn btn-outline-primary btn-square me-2" href="#"><i class="bi bi-facebook"></i></a>
+                                <a class="btn btn-outline-primary btn-square me-2" href="#"><i class="bi bi-linkedin"></i></a>
+                                <a class="btn btn-outline-primary btn-square" href="#"><i class="bi bi-instagram"></i></a>
+                            </div>
                         </div>
-                        <div class="col-lg-6">
-                            <h4 class="mb-3 text-uppercase">Liên hệ</h4>
-                            <p class="text-uppercase text-sm text-gray-500">5 Lê Thánh Tông, Phan Chu Trinh, Hoàn Kiếm, Hà Nội</p>
-                            <p class="text-uppercase text-sm text-gray-500">Số điện thoại: <strong>024.3976.3585</strong></p>
-                            <p class="text-uppercase text-sm text-gray-500">Fax: <strong>024.3976.1996</strong></p>
+                        <div class="col-12 text-center text-body">
+                            <a class="text-body" href="">Terms & Conditions</a>
+                            <span class="mx-1">|</span>
+                            <a class="text-body" href="">Privacy Policy</a>
+                            <span class="mx-1">|</span>
+                            <a class="text-body" href="">Customer Support</a>
+                            <span class="mx-1">|</span>
+                            <a class="text-body" href="">Payments</a>
+                            <span class="mx-1">|</span>
+                            <a class="text-body" href="">Help</a>
+                            <span class="mx-1">|</span>
+                            <a class="text-body" href="">FAQs</a>
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- COPYRIGHTS                -->
-            <div class="bg-dark py-2">
+            <div class="container-fluid bg-dark text-white-50 py-4">
                 <div class="container">
-                    <div class="row align-items-cenrer gy-3 text-center">
-                        <div class="col-md-6 text-md-start">
-                            <p class="mb-0 text-sm text-gray-500">&copy; 2021. <strong>Bus Ticket</strong> / Đã đăng ký Bản quyền. <b>Phiên bản</b> 1.0.0</p>
+                    <div class="row g-5">
+                        <div class="col-md-6 text-center text-md-start">
+                            <p class="mb-md-0">&copy; <a class="text-white" href="#">Doctreat</a>. All Rights Reserved.</p>
                         </div>
-                        <div class="col-md-6 text text-md-end">
-                            <p class="mb-0 text-sm text-gray-500">Thư viện được thiết kế bởi <a href="https://bootstrapious.com" target="_blank">Bootstrapious</a> &amp; <a href="https://hikershq.com/" target="_blank">HHQ</a> </p>
+                        <div class="col-md-6 text-center text-md-end">
+                            <p class="mb-0">Designed by <a class="text-white" href="https://htmlcodex.com">HTML Codex</a></p>
                         </div>
                     </div>
                 </div>
             </div>
+            <!-- Footer End -->
         </footer>
     </div>
     <!-- JavaScript files-->
-    <script src="plugins/bootstrapuniversal/js/bootstrap.bundle.min.js"></script>
-    <script src="plugins/waypoints/lib/noframework.waypoints.js"></script>
-    <script src="plugins/swiper/swiper-bundle.min.js"></script>
-    <script src="plugins/choices.js/public/assets/scripts/choices.js"></script>
-    <script src="js/universal/theme.js"></script>
-    <script src="js/pages/main.js"></script>
-    <script src="plugins/jquery-ui/jquery-ui-1.13.0.custom/jquery-ui.min.js"></script>
-    <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
 </body>
 
 </html>
