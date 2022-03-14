@@ -17,14 +17,7 @@ class FeatureController extends Controller
 {
     public function viewWelcome()
     {
-        $getCity = DB::table('station')->select('city')->groupBy('city')->get();
-
-        $data = [];
-        foreach ($getCity as $city) {
-            $data[] = $city->city;
-        }
-
-        return view('pages/welcome', ['data' => $data]);
+        return view('pages/welcome');
     }
 
     public function viewContact()
