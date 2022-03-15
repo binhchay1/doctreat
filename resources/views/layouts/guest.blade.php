@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
    
     <link rel="icon" href="{{ URL::to('img/logo_icon.ico') }}">
-    <title>{{ config('app.name', 'Doctreat') }}</title>
+    <title>{{ config('app.name', 'diamondPet') }}</title>
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
