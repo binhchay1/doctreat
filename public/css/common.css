@@ -1,0 +1,310 @@
+.main-header {
+    border-bottom: solid 1px #eaedf1;
+}
+
+.content-header {
+    background: #fff;
+    margin-bottom: 20px;
+    border-bottom: solid 1px #ccc;
+    text-transform: uppercase;
+}
+
+.fs-20 {
+    font-size: 20px;
+}
+
+.pd5 {
+    padding: 5px;
+}
+
+.pd10 {
+    padding: 10px;
+}
+
+.pd15 {
+    padding: 15px;
+}
+
+.pd20 {
+    padding: 20px !important;
+}
+
+.pd-unset {
+    padding: unset !important;
+}
+
+.mt10 {
+    margin-top: 10px !important;
+}
+
+.mt20 {
+    margin-top: 20px !important;
+}
+
+.mb20 {
+    margin-bottom: 20px !important;
+}
+
+.w200 {
+    width: 200px;
+}
+
+.mw50 {
+    min-width: 50px;
+}
+
+.mw60 {
+    min-width: 60px;
+}
+
+.mw100 {
+    min-width: 100px;
+}
+
+.mw120 {
+    min-width: 120px;
+}
+
+.mw200 {
+    min-width: 200px;
+}
+
+.h200 {
+    height: 200px;
+}
+
+.mh100 {
+    min-height: 100px;
+}
+
+.mh200 {
+    min-height: 200px;
+}
+
+.maw200 {
+    max-width: 200px;
+}
+
+.mah200 {
+    max-height: 200px;
+}
+
+.mah90 {
+    max-height: 90px;
+}
+
+.form-area > div {
+    margin: 0px;
+    padding: 0px;
+}
+.form-area .form-header {
+    background-color: #e9f2ff;
+    border-radius: 10px 10px 0px 0px;
+}
+.form-area .form-body .form-group {
+    margin: 0px;
+    border-bottom: 1px solid #ccc;
+}
+.form-area .form-body .form-group .col-form-label {
+    background-color: #f8f9fa;
+    font-weight: unset;
+}
+.form-area .form-body .form-group .col-form-input {
+    padding-top: calc(0.375rem + 1px);
+    padding-bottom: calc(0.375rem + 1px);
+    background: #fff;
+}
+.form-area .form-body .form-group .col-form-input-view {
+    background: #fff;
+}
+.input-image-preview {
+    margin-top: 10px;
+    width: 40%;
+}
+
+.option-payment-method {
+    font-size: 15px;
+}
+
+.select-payment-method {
+    padding: 20px;
+}
+
+.label-select-payment {
+    font-size: 18px;
+}
+
+.label-bank {
+    margin-top: 6px;
+}
+
+.fnz-style-table table thead tr {
+    height: 30px;
+    line-height: 15px;
+}
+.fnz-style-table table tr th {
+    color: #fff;
+    background: #007bff;
+    font-size: 16px;
+}
+.fnz-style-table table tr td {
+    line-height: 15px;
+    font-size: 16px;
+    vertical-align: inherit;
+}
+.fnz-style-table table tr th:first-child {
+    border-radius: 5px 0px 0px 0px;
+}
+.fnz-style-table table tr th:last-child {
+    border-radius: 0px 5px 0px 0px;
+}
+.fnz-style-table table tbody {
+    font-size: 14px;
+}
+.fnz-style-table table tbody a.lh-3 {
+    line-height: 3em;
+}
+.fnz-style-table table .copy-button {
+    border: none;
+    padding: 0px;
+    background-color: unset;
+    margin: -6px 0px 0px 3px;
+}
+.fnz-style-table table .pagination {
+    margin: 0px;
+}
+
+.process-checkout-label {
+    border: none;
+    text-transform: uppercase;
+}
+
+.process-checkout-label:hover {
+    background: unset;
+}
+
+.process-checkout-label.init {
+    color: #218838;
+}
+
+.process-checkout-label.checkout_active,
+.process-checkout-label.checkout_complete,
+.process-checkout-label.completed {
+    color: #28a745;
+}
+
+.process-checkout-label.refund_init,
+.process-checkout-label.refund_active,
+.process-checkout-label.refund_approved,
+.process-checkout-label.refund_completed,
+.process-checkout-label.refund_close {
+    color: #e83e8c;
+}
+
+.process-checkout-label.checkout-label-exception {
+    color: red !important;
+}
+
+.process-checkout-label.checkout-label-reject {
+    color: #e74c3c !important;
+}
+
+#msg-error-create-payment {
+    color: red;
+}
+
+.logo-preview {
+    max-width: 200px;
+    max-height: 200px;
+}
+
+textarea {
+    resize: none;
+    border-color: black !important;
+}
+
+input {
+    border-radius: 4px !important;
+}
+
+.select-create-user {
+    border-radius: 5px;
+    border-color: black;
+}
+
+.div-select-user {
+    width: 12.8%;
+}
+
+@media only screen and (min-width: 450px) and (max-width: 500px) {
+    .text-truncate-phone {
+        width: 334px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media only screen and (min-width: 400px) and (max-width: 450px) {
+    .text-truncate-phone {
+        width: 300px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media screen and (min-width: 350px) and (max-width: 400px) {
+    .text-truncate-phone {
+        width: 275px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media screen and (max-width: 350px) {
+    .text-truncate-phone {
+        width: 216px !important;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+}
+@media screen and (max-width: 500px) {
+    .company-info-phone {
+        margin-left: 1px;
+    }
+
+    .form-checkout-rapyd {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .detail-phone {
+        margin-left: -7px;
+        margin-right: -7px;
+    }
+
+    .img-logo {
+        display: none;
+    }
+
+    .flex-row-reverse {
+        flex-direction: row !important;
+    }
+}
+.dropdown-toggle::after {
+    margin-right: 7px;
+}
+
+.min-h-100 {
+    min-height: 100px;
+}
+
+.table tr {
+    height: 64px;
+}
+
+.pagination {
+    margin: 0 !important;
+    padding-bottom: 10px;
+    float: right;
+}

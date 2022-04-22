@@ -22,6 +22,9 @@ class UserSeeder extends Seeder
             'email_verified_at' => '2021-10-27 07:23:38',
             'password' => Hash::make('123456789'),
             'role' => 1,
+            'phone' =>  '123456789',
+            'dob' => '1995-24-02',
+            'gender' => '1',
             'created_at' => '2021-10-28 00:43:47'
         ]);
     }

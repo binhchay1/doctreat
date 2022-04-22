@@ -2,7 +2,7 @@
     <script src="{{ URL::to('/js/pages/register.js') }}" defer></script>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <img src="{{ URL::to('img/logo-removebg.png') }}" width="500" height="300">
+            <img src="{{ URL::to('img/favicon.ico') }}" width="100" height="150">
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
@@ -33,11 +33,6 @@
             <div class="mt-4">
                 <x-jet-label for="phone" value="{{ __('Số điện thoại') }}" />
                 <x-jet-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autocomplete="phone" />
-            </div>
-
-            <div class="mt-4">
-                <x-jet-label for="cmt" value="{{ __('CMT/CCCD') }}" />
-                <x-jet-input id="cmt" class="block mt-1 w-full" type="text" name="cmt" :value="old('cmt')" required autocomplete="cmt" />
             </div>
 
             <div class="mt-4">

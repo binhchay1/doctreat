@@ -18,7 +18,7 @@ $(document).ready(function () {
 
     let d = new Date();
     let optionDay = '<option value="year" disabled>năm</option>';
-    selectedYear = "year";
+    let selectedYear = "year";
     for (let i = 1930; i <= d.getFullYear(); i++) {
         optionDay = optionDay + '<option value="' + i + '">' + i + '</option>';
     }
@@ -30,6 +30,7 @@ $(document).ready(function () {
         return /^-?\d*$/.test(value);
     });
 });
+
 function isLeapYear(year) {
     year = parseInt(year);
     if (year % 4 != 0) {

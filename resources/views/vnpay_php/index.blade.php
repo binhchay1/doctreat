@@ -45,7 +45,7 @@ $expire = date('YmdHis', strtotime('+30 minutes', strtotime($startTime)));
                 </div>
                 <div class="form-group">
                     <label for="order_id">Mã hóa đơn</label>
-                    <input class="form-control" id="order_id" name="order_id" type="text" value="{{ $data['payment_code'] }}" />
+                    <input class="form-control" id="order_id" name="order_id" type="text" value="{{ $data['order_id'] }}" />
                 </div>
                 <div class="form-group">
                     <label for="amount">Số tiền</label>
@@ -53,7 +53,7 @@ $expire = date('YmdHis', strtotime('+30 minutes', strtotime($startTime)));
                 </div>
                 <div class="form-group">
                     <label for="order_desc">Nội dung thanh toán</label>
-                    <textarea class="form-control" cols="20" id="order_desc" name="order_desc" rows="2">Thanh toán vé xe {{ $data['bus'] }}</textarea>
+                    <textarea class="form-control" cols="20" id="order_desc" name="order_desc" rows="2">Thanh toán cho {{ $data['order_id'] }}</textarea>
                 </div>
                 <div class="form-group">
                     <label for="bank_code">Ngân hàng</label>
@@ -199,19 +199,11 @@ $expire = date('YmdHis', strtotime('+30 minutes', strtotime($startTime)));
                     <input class="form-control" id="txt_inv_mobile" name="txt_inv_mobile" type="text" value="{{ $data['phone_customer'] }}" />
                 </div>
                 <input type="hidden" name="cost" id="cost">
-                <input type="hidden" name="bus" id="bus">
                 <input type="hidden" name="name_customer" id="name_customer">
                 <input type="hidden" name="phone_customer" id="phone_customer">
-                <input type="hidden" name="name" id="name">
-                <input type="hidden" name="license_plate" id="license_plate">
-                <input type="hidden" name="roads" id="roads">
-                <input type="hidden" name="start" id="start">
-                <input type="hidden" name="end" id="end">
-                <input type="hidden" name="driver" id="driver">
-                <input type="hidden" name="driver_mate" id="driver_mate">
-                <input type="hidden" name="date" id="date">
-                <input type="hidden" name="total_buy" id="total_buy">
-                <input type="hidden" name="trips_id" id="trips_id">
+                <input type="hidden" name="address_customer" id="address_customer">
+                <input type="hidden" name="order_date" id="order_date">
+                <input type="hidden" name="payment_code" id="payment_code">
                 @if(isset($data['users_id']))
                 <input type="hidden" name="users_id" id="users_id" value="{{ $data['users_id'] }}">
                 @endif
@@ -232,34 +224,20 @@ $expire = date('YmdHis', strtotime('+30 minutes', strtotime($startTime)));
     $(document).ready(function() {
 
         let cost = <?php echo json_encode($data['cost']) ?>;
-        let bus = <?php echo json_encode($data['bus']) ?>;
         let name_customer = <?php echo json_encode($data['name_customer']) ?>;
         let phone_customer = <?php echo json_encode($data['phone_customer']) ?>;
-        let name = <?php echo json_encode($data['name']) ?>;
-        let license_plate = <?php echo json_encode($data['license_plate']) ?>;
-        let roads = <?php echo json_encode($data['roads']) ?>;
-        let start = <?php echo json_encode($data['start']) ?>;
-        let end = <?php echo json_encode($data['end']) ?>;
-        let driver = <?php echo json_encode($data['driver']) ?>;
-        let driver_mate = <?php echo json_encode($data['driver_mate']) ?>;
-        let date = <?php echo json_encode($data['date']) ?>;
-        let total_buy = <?php echo json_encode($data['total_buy']) ?>;
-        let trips_id = <?php echo json_encode($data['trips_id']) ?>;
+        let address_customer = <?php echo json_encode($data['address_customer']) ?>;
+        let order_date = <?php echo json_encode($data['order_date']) ?>;
+        let order_id = <?php echo json_encode($data['order_id']) ?>;
+        let payment_code = <?php echo json_encode($data['payment_code']) ?>;
         
         $('#cost').val(cost);
-        $('#bus').val(bus);
         $('#name_customer').val(name_customer);
         $('#phone_customer').val(phone_customer);
-        $('#name').val(name);
-        $('#license_plate').val(license_plate);
-        $('#roads').val(roads);
-        $('#start').val(start);
-        $('#end').val(end);
-        $('#driver').val(driver);
-        $('#driver_mate').val(driver_mate);
-        $('#date').val(date);
-        $('#total_buy').val(total_buy);
-        $('#trips_id').val(trips_id);
+        $('#address_customer').val(address_customer);
+        $('#order_date').val(order_date);
+        $('#order_id').val(order_id);
+        $('#payment_code').val(payment_code);
 
         $('form#create_form').submit();
     });

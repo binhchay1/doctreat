@@ -32,7 +32,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'gender',
         'cmt',
         'dob',
-        'status_delete'
+        'status_delete',
+        'email_verified_at'
     ];
 
     /**
@@ -64,4 +65,19 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function isAdmin()
+    {
+        return $this->role == 1;
+    }
+
+    public function isDoctor()
+    {
+        return $this->role == 2;
+    }
+
+    public function isEmployee()
+    {
+        return $this->role == 3;
+    }
 }

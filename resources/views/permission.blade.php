@@ -10,7 +10,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ URL::to('plugins/bootstrapuniversal/css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ URL::to('css/plus/bootstrap.min.css') }}" />
 
     <link rel="icon" href="{{ URL::to('img/icon.png') }}">
 
@@ -47,7 +47,6 @@
         :after,
         :before {
             box-sizing: border-box;
-            border: 0 solid #e2e8f0
         }
 
         a {
@@ -542,7 +541,7 @@
     <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
         <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
             <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
-                <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
+                <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider" style="border-right: 1px solid rgba(160, 174, 192, var(--text-opacity));">
                     400
                 </div>
 
@@ -554,7 +553,7 @@
             <form method="POST" action="{{ route('logout') }}" class="mt-3" style="margin-left: 120px">
                 @csrf
 
-                <button type="submit" class="text-sm hover:text-gray-900 btn btn-primary">
+                <button type="submit" class="btn btn-success text-sm hover:text-gray-900 mt-2" style="border-radius: 4px;">
                     {{ __('Đăng xuất') }}
                 </button>
             </form>

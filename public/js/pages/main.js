@@ -1,7 +1,17 @@
 (function ($) {
     "use strict";
 
-    // Sticky Navbar
+    let url = window.location.pathname;
+    let type = url.slice(1);
+
+    if (type == 'about' || type == 'service' || type == 'product' || type == 'schedule' || type == '') {
+        if (type == '') {
+            document.getElementById('main').className += " active";
+        } else {
+            document.getElementById(type).className += " active";
+        }
+    }
+
     $(window).scroll(function () {
         if ($(this).scrollTop() > 40) {
             $('.navbar').addClass('sticky-top');
@@ -9,8 +19,7 @@
             $('.navbar').removeClass('sticky-top');
         }
     });
-    
-    // Dropdown on mouse hover
+
     $(document).ready(function () {
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
@@ -27,10 +36,8 @@
         $(window).resize(toggleNavbarMethod);
     });
 
-
-    // Modal Video
     $(document).ready(function () {
-        var $videoSrc;
+        let $videoSrc;
         $('.btn-play').click(function () {
             $videoSrc = $(this).data("src");
         });
@@ -43,9 +50,7 @@
             $("#video").attr('src', $videoSrc);
         })
     });
-    
-    
-    // Back to top button
+
     $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
             $('.back-to-top').fadeIn('slow');
@@ -54,35 +59,33 @@
         }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        $('html, body').animate({ scrollTop: 0 }, 1500, 'easeInOutExpo');
         return false;
     });
 
-
-    // Product carousel
     $(".product-carousel").owlCarousel({
         autoplay: true,
         smartSpeed: 1000,
         margin: 45,
         dots: false,
         loop: true,
-        nav : true,
-        navText : [
+        nav: true,
+        navText: [
             '<i class="bi bi-arrow-left"></i>',
             '<i class="bi bi-arrow-right"></i>'
         ],
         responsive: {
-            0:{
-                items:1
+            0: {
+                items: 1
             },
-            768:{
-                items:2
+            768: {
+                items: 2
             },
-            992:{
-                items:3
+            992: {
+                items: 3
             },
-            1200:{
-                items:4
+            1200: {
+                items: 4
             }
         }
     });
@@ -95,23 +98,23 @@
         margin: 45,
         dots: false,
         loop: true,
-        nav : true,
-        navText : [
+        nav: true,
+        navText: [
             '<i class="bi bi-arrow-left"></i>',
             '<i class="bi bi-arrow-right"></i>'
         ],
         responsive: {
-            0:{
-                items:1
+            0: {
+                items: 1
             },
-            768:{
-                items:2
+            768: {
+                items: 2
             },
-            992:{
-                items:3
+            992: {
+                items: 3
             },
-            1200:{
-                items:4
+            1200: {
+                items: 4
             }
         }
     });
@@ -124,12 +127,39 @@
         items: 1,
         dots: false,
         loop: true,
-        nav : true,
-        navText : [
+        nav: true,
+        navText: [
             '<i class="bi bi-arrow-left"></i>',
             '<i class="bi bi-arrow-right"></i>'
         ],
     });
-    
+
+    $("#alert-success").fadeTo(2000, 500).slideUp(500, function () {
+        $("#alert-success").slideUp(500);
+        $("#alert-success").removeClass("d-block").addClass("d-none");
+    });
+
 })(jQuery);
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function addQuantity() {
+    let url = '/update-cart';
+    let id = document.getElementById('id-cart-item').value;
+    let quantity = document.getElementById('number-of-quantity').value;
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        data: {
+            id: id,
+            quantity: quantity
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    }).done(function (result) {
+    });
+}

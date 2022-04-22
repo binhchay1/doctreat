@@ -2,53 +2,89 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
+use App\Repositories\OrderRepository;
+use App\Repositories\OrderLineRepository;
+use App\Repositories\InvoiceRepository;
+use App\Repositories\PromotionRepository;
+use App\Repositories\PaymentRepository;
+use App\Repositories\StorageRepository;
+use App\Http\Requests\ConfirmRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use App\Http\Requests\PaymentRequest;
 use App\Models\Payment;
+use Cart;
 
 class VNPAYController extends Controller
 {
-    public function createPay(PaymentRequest $request)
-    {   
-       
+    private OrderRepository $orderRepository;
+    private OrderLineRepository $orderLineRepository;
+    private InvoiceRepository $invoiceRepository;
+    private PromotionRepository $promotionRepository;
+    private PaymentRepository $paymentRepository;
+    private StorageRepository $storageRepository;
+
+    public function __construct(
+        OrderRepository $orderRepository,
+        OrderLineRepository $orderLineRepository,
+        InvoiceRepository $invoiceRepository,
+        PromotionRepository $promotionRepository,
+        PaymentRepository $paymentRepository,
+        StorageRepository $storageRepository
+    ) {
+        $this->orderRepository = $orderRepository;
+        $this->orderLineRepository = $orderLineRepository;
+        $this->invoiceRepository = $invoiceRepository;
+        $this->promotionRepository = $promotionRepository;
+        $this->paymentRepository = $paymentRepository;
+        $this->storageRepository = $storageRepository;
+    }
+
+    public function createPay(ConfirmRequest $request)
+    {
         $payment_code = $this->generateRandomString(20);
-        $calTicketBuy = DB::table('ticket')->where('trips_id', $request->trips_id)->whereNotNull('name_customer')->whereNotNull('phone_customer')->count();
-        $totalSeat = DB::table('ticket')->where('trips_id', $request->trips_id)->count();
-        $stock = $totalSeat - $calTicketBuy;
-
-        if ($request->total_buy == 0) {
-            $data = new \stdClass();
-            $data->textError = 'Xin vui lòng nhập số vé cần mua. Xin cám ơn!';
-
-            return view('pages.buy-fail', ['data' => $data]);
+        $cost = 0;
+        $cart = Cart::getContent();
+        foreach ($cart as $item) {
+            $totalCostByItem = $item['price'] * $item['quantity'];
+            $cost = $cost + $totalCostByItem;
         }
 
-        if ($request->total_buy > $stock) {
-            $data = new \stdClass();
-            $data->textError = 'Bạn không thể mua quá số ghế còn trống trên xe. Vui lòng thử lại!';
+        $data['cost'] = $cost;
+        $data['name_customer'] = $request->name;
+        $data['phone_customer'] = $request->phone;
+        $data['address_customer'] = $request->address;
+        $data['order_date'] = date('Y-m-d');
+        $data['status'] = 'Chờ phê duyệt';
 
-            return view('pages.buy-fail', ['data' => $data]);
+        $order = $this->orderRepository->create($data);
+
+        foreach ($cart as $item) {
+            $dataOrderLine = [
+                'order_id' => $order->id,
+                'product_id' => $item->id,
+                'quantity' => $item->quantity,
+            ];
+
+            $dataInvoice = [
+                'payment_code' => $payment_code,
+                'order_id' => $order->id,
+            ];
+            $this->orderLineRepository->create($dataOrderLine);
+            $this->invoiceRepository->create($dataInvoice);
         }
 
-        $data['cost'] = $request->cost * $request->total_buy;
-        $data['bus'] = $request->bus;
-        $data['name_customer'] = $request->name_customer;
-        $data['phone_customer'] = $request->phone_customer;
-        $data['name'] = $request->name;
-        $data['license_plate'] = $request->license_plate;
-        $data['roads'] = $request->roads;
-        $data['start'] = $request->start;
-        $data['end'] = $request->end;
-        $data['driver'] = $request->driver;
-        $data['driver_mate'] = $request->driver_mate;
-        $data['date'] = $request->date;
-        $data['total_buy'] = $request->total_buy;
-        $data['trips_id'] = $request->trips_id;
+        $data['order_id'] = $order->id;
         $data['payment_code'] = $payment_code;
-        if(isset($request->users_id)) {
+        if (isset($request->users_id)) {
             $data['users_id'] = $request->users_id;
+        }
+
+        if (isset($request->promotion)) {
+            $promotion = $this->promotionRepository->getPromotionByCode($request->promotion);
+            
+            $data['cost'] = (int) $data['cost'] - ((int) $data['cost'] * $promotion->percent / 100);
+            session()->put('promotion', $request->promotion);
         }
 
         return view('vnpay_php.index', ['data' => $data]);
@@ -57,17 +93,17 @@ class VNPAYController extends Controller
     public function paymentProcess(Request $request)
     {
         $getRequest = $request->all();
-        $arrayCheckParam = ['cost', 'bus', 'name_customer', 'phone_customer', 'name', 'license_plate', 'roads', 'start', 'end', 'driver', 'driver_mate', 'date', 'total_buy', 'trips_id', 'order_id', 'users_id'];
-        
+        $arrayCheckParam = ['cost', 'name_customer', 'phone_customer', 'address_customer', 'order_date', 'order_id', 'payment_code'];
+
         $payment = new Payment();
         foreach ($getRequest as $key => $value) {
             if (in_array($key, $arrayCheckParam)) {
-                
-                if($key == 'order_id') {
-                    $key = 'payment_id';
-                }
                 $payment->$key = $value;
             }
+        }
+
+        if(Auth::check()) {
+            $payment->users_id = Auth::user()->id;
         }
         $payment->status_payment = 'Đang thanh toán';
 
@@ -78,7 +114,7 @@ class VNPAYController extends Controller
         $vnp_Url = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
         $vnp_Returnurl = "http://127.0.0.1:8000/payment-return?";
 
-        $vnp_TxnRef = $_POST['order_id'];
+        $vnp_TxnRef = $_POST['payment_code'];
         $vnp_OrderInfo = $_POST['order_desc'];
         $vnp_OrderType = $_POST['order_type'];
         $vnp_Amount = $_POST['amount'] * 100;
@@ -174,29 +210,50 @@ class VNPAYController extends Controller
         }
     }
 
-    public function paymentReturn()
+    public function paymentReturn(Request $request)
     {
+        $payment = $this->paymentRepository->getPaymentByCode($request->vnp_TxnRef);
+        $order_line = $this->orderLineRepository->getOrderLineByOrder($payment->order_id);
+
+        foreach ($order_line as $line) {
+            $getLastQuantity = $this->storageRepository->getLastQuantity($line->product_id);
+            $dataStorage = [
+                'product_id' => $line->product_id,
+                'quantity' => (int) $getLastQuantity->quantity - (int) $line->quantity
+            ];
+            $this->storageRepository->addStorage($dataStorage);
+        }
+
+        if ($request->session()->has('promotion')) {
+            $code = session()->get('promotion');
+            $this->promotionRepository->updateStatusCodeByCode($code, 'used');
+            $request->session()->forget('promotion');
+        }
+        
         return view('vnpay_php.vnpay_return');
     }
 
     public function paymentFail(Request $request)
     {
         $data = new \stdClass();
-        $payment = Payment::where('payment_id', $request->paymentid)->first();
-        $payment->update(['status_payment' => 'Thất bại']);
+        $this->paymentRepository->update($request->paymentid, 'Thất bại');
 
         $data->textError = 'Thanh toán thất bại. Vui lòng thử lại';
 
         return view('pages.buy-fail', ['data' => $data]);
     }
 
-    function generateRandomString($length)
+    public function generateRandomString($length)
     {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
         $randomString = '';
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        $invoice = $this->invoiceRepository->getInvoiceByPaymentCode($randomString);
+        if ($invoice != null) {
+            $this->generateRandomString($length);
         }
         return $randomString;
     }

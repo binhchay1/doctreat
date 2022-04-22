@@ -91,14 +91,14 @@
                     if ($secureHash == $vnp_SecureHash) {
                         if ($_GET['vnp_ResponseCode'] == '00') {
                             echo "<span style='color:blue' id='text-response'>GD Thanh cong</span>";
-                            header("refresh:5; url=http://127.0.0.1:8000/print-ticket?paymentid=" . $_GET['vnp_TxnRef']);
+                            header("refresh:5; url=/invoice?payment_code=" . $_GET['vnp_TxnRef'] . "&total=" . $_GET['vnp_Amount']);
                         } else {
                             echo "<span style='color:red' id='text-response'>GD Khong thanh cong</span>";
-                            header("refresh:5; url=http://127.0.0.1:8000/payment-fail?paymentid=" . $_GET['vnp_TxnRef']);
+                            header("refresh:5; url=/payment-fail?payment_code=" . $_GET['vnp_TxnRef']);
                         }
                     } else {
                         echo "<span style='color:red' id='text-response'>Chu ky khong hop le</span>";
-                        header("refresh:5; url=http://127.0.0.1:8000/payment-fail?paymentid=" . $_GET['vnp_TxnRef']);
+                        header("refresh:5; url=/payment-fail?payment_code=" . $_GET['vnp_TxnRef']);
                     }
                     ?>
                 </label>

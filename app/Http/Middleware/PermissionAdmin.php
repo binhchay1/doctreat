@@ -17,8 +17,7 @@ class PermissionAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (Auth::user()->role && Auth::user()->role == 1) {
-
+        if (Auth::check() && Auth::user()->role == \App\Enums\Role::ADMIN) {
             return $next($request);
         } else {
             return redirect('/error/permission');

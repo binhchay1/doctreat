@@ -1,7 +1,7 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <img src="{{ URL::to('img/logo-removebg.png') }}" width="500" height="300">
+            <img src="{{ URL::to('img/favicon.ico') }}" width="100" height="150">
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />
