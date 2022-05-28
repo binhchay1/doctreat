@@ -2,7 +2,7 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Faker\Factory as Faker;
 use App\Repositories\PaymentRepository;
 use App\Models\Payment;
@@ -15,22 +15,47 @@ class PaymentTest extends TestCase
     {
         parent::setUp();
         $this->faker = Faker::create();
-        $this->payment = [
-            'payment_code' => $this->faker->payment_code,
-            'order_id' => $this->faker->order_id,
-            'name_customer' => $this->faker->name_customer,
-            'phone_customer' => $this->faker->phone_customer,
-            'order_date' => $this->faker->order_date,
-            'cost' => $this->faker->cost,
-            'status_payment' => $this->faker->status_payment,
-            'address_customer' => $this->faker->address_customer,
-        ];
+        $this->payment = new Payment();
         $this->paymentRepository = new PaymentRepository();
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        unset($this->payment);
+    }
+
+    public function test_table_name()
+    {
+        $this->assertEquals('payment', $this->payment->getTable());
+    }
+
+    public function test_fillable()
+    {
+        $this->assertEquals([
+            'status_payment',
+            'payment_code',
+            'order_id',
+            'name_customer',
+            'phone_customer',
+            'order_date',
+            'cost',
+            'address_customer'
+        ], $this->payment->getFillable());
     }
 
     public function testStore()
     {
+        $this->payment = [
+            'payment_code' => $this->faker->creditCardNumber,
+            'order_id' => $this->faker->randomDigit,
+            'name_customer' => $this->faker->name,
+            'phone_customer' => $this->faker->phoneNumber,
+            'order_date' => $this->faker->date,
+            'cost' => $this->faker->randomDigit,
+            'status_payment' => $this->faker->randomDigit,
+            'address_customer' => $this->faker->address,
+        ];
         $payment = $this->paymentRepository->create($this->payment);
         $this->assertInstanceOf(Payment::class, $payment);
         $this->assertEquals($this->payment['payment_code'], $payment->payment_code);

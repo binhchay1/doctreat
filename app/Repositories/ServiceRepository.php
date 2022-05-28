@@ -30,13 +30,14 @@ class ServiceRepository extends BaseRepository
 
         $limit = isset($filter['limit']) ? (int) $filter['limit'] : config('paginate.limit-default');
 
-        $query->with('user');
+        $query = $query->with(['user' => function ($query) use ($filter) {
+            if (isset($filter['doctor'])) {
+                return $query->where('name', 'like', '%' . $filter['doctor'] . '%');
+            }
+        }]);
+
         if (isset($filter['name'])) {
             $query = $query->where('name', 'like', '%' . $filter['name'] . '%');
-        }
-
-        if (isset($filter['doctor'])) {
-            $query = $query->where('user.name', 'like', '%' . $filter['doctor'] . '%');
         }
 
         $query = $query->orderBy('id', 'DESC');
@@ -44,7 +45,8 @@ class ServiceRepository extends BaseRepository
         return $query->paginate($limit);
     }
 
-    public function getAllServiceWithDoctor() {
+    public function getAllServiceWithDoctor()
+    {
         $query = $this->model->query();
 
         return $query->with('user')->get();

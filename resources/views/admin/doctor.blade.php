@@ -22,11 +22,12 @@
                 <div class="d-flex flex-row">
                     <div class="card" style="width: 18rem;">
                         <div class="card-body">
-                            @if(!$schedules->isEmpty() and $check == 1)
+                            @if(!$schedules->isEmpty() and $check == 1 )
                             <h5 class="card-title">Vui lòng chọn lịch khám</h5>
                             <select class="form-control mt-5" id="schedule-select">
                                 @foreach($schedules as $schedule)
-                                @if(isset($schedule->user))
+                            
+                                @if(isset($schedule->user) and $schedule->status == 1)
                                 <option value="{{ $schedule->id }}">{{ $schedule->user->name }} - {{ $schedule->user->phone}}</option>
                                 @endif
                                 @endforeach
@@ -53,7 +54,7 @@
                     @endif
                 </div>
 
-                @if(!$schedules->isEmpty() and $check == 1)
+                @if(!$schedules->isEmpty() and $check == 1 )
                 <div class="card" style="width: 75%;">
                     <div class="card-body">
                         <h5 class="card-title">Thông tin khách hàng</h5>

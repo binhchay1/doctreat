@@ -45,7 +45,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label">Bác sĩ phụ trách</label>
                         <div class="col-sm-10 col-form-input">
-                            <select class="form-select" name="doctor" value="{{ old('price', $service->price ?? null) }}" style="width: 40%;">
+                            <select class="form-select" name="doctor" value="{{ old('doctor', $service->doctor_id ?? null) }}" style="width: 40%;">
                                 @foreach($doctors as $doctor)
                                 <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                                 @endforeach

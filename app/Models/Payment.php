@@ -11,7 +11,16 @@ class Payment extends Model
 
     protected $table = 'payment';
 
-    protected $fillable = ['status_payment'];
+    protected $fillable = [
+        'status_payment',
+        'payment_code',
+        'order_id',
+        'name_customer',
+        'phone_customer',
+        'order_date',
+        'cost',
+        'address_customer'
+    ];
 
     public $timestamps = true;
 }

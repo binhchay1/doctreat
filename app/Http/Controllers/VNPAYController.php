@@ -40,23 +40,35 @@ class VNPAYController extends Controller
         $this->storageRepository = $storageRepository;
     }
 
+    //Tạo hóa đơn
     public function createPay(ConfirmRequest $request)
     {
+        $cartItems = Cart::getContent();
+        foreach ($cartItems as $item) {
+            $storage = $this->storageRepository->getLastQuantity($item->id);
+
+            if($storage->quantity < $item->quantity) {
+                return redirect()->route('cart.list')->with('success', 'Số lượng sản phẩm trong kho không đủ! Vui lòng kiểm tra lại');
+            }
+        }
+        //tạo payment code
         $payment_code = $this->generateRandomString(20);
         $cost = 0;
         $cart = Cart::getContent();
+        // tính giá tiền sản phẩm
         foreach ($cart as $item) {
             $totalCostByItem = $item['price'] * $item['quantity'];
             $cost = $cost + $totalCostByItem;
         }
-
+        //tính số tiền
         $data['cost'] = $cost;
+        //tên khách hàng
         $data['name_customer'] = $request->name;
         $data['phone_customer'] = $request->phone;
         $data['address_customer'] = $request->address;
         $data['order_date'] = date('Y-m-d');
         $data['status'] = 'Chờ phê duyệt';
-
+        // tạo order
         $order = $this->orderRepository->create($data);
 
         foreach ($cart as $item) {
@@ -70,19 +82,22 @@ class VNPAYController extends Controller
                 'payment_code' => $payment_code,
                 'order_id' => $order->id,
             ];
+            //tạo orderline
             $this->orderLineRepository->create($dataOrderLine);
+            //tạo hóa đơn
             $this->invoiceRepository->create($dataInvoice);
         }
 
         $data['order_id'] = $order->id;
         $data['payment_code'] = $payment_code;
+        //Kiểm tra user
         if (isset($request->users_id)) {
             $data['users_id'] = $request->users_id;
         }
-
+        //Kiểm tra promotion
         if (isset($request->promotion)) {
             $promotion = $this->promotionRepository->getPromotionByCode($request->promotion);
-            
+            //Tính tổng
             $data['cost'] = (int) $data['cost'] - ((int) $data['cost'] * $promotion->percent / 100);
             session()->put('promotion', $request->promotion);
         }
@@ -92,6 +107,16 @@ class VNPAYController extends Controller
 
     public function paymentProcess(Request $request)
     {
+        $payment = $this->paymentRepository->getPaymentByCode($request->payment_code);
+        $order_line = $this->orderLineRepository->getOrderLineByOrder($payment->order_id);
+
+        foreach ($order_line as $line) {
+            $getLastQuantity = $this->storageRepository->getLastQuantity($line->product_id);
+            if ((int) $line->quantity > (int) $getLastQuantity->quantity) {
+                return view('pages.blog');
+            }
+        }
+
         $getRequest = $request->all();
         $arrayCheckParam = ['cost', 'name_customer', 'phone_customer', 'address_customer', 'order_date', 'order_id', 'payment_code'];
 
@@ -102,10 +127,10 @@ class VNPAYController extends Controller
             }
         }
 
-        if(Auth::check()) {
+        if (Auth::check()) {
             $payment->users_id = Auth::user()->id;
         }
-        $payment->status_payment = 'Đang thanh toán';
+        $payment->status_payment = 'Thất Bại';
 
         $payment->save();
 
@@ -213,31 +238,24 @@ class VNPAYController extends Controller
     public function paymentReturn(Request $request)
     {
         $payment = $this->paymentRepository->getPaymentByCode($request->vnp_TxnRef);
-        $order_line = $this->orderLineRepository->getOrderLineByOrder($payment->order_id);
-
-        foreach ($order_line as $line) {
-            $getLastQuantity = $this->storageRepository->getLastQuantity($line->product_id);
-            $dataStorage = [
-                'product_id' => $line->product_id,
-                'quantity' => (int) $getLastQuantity->quantity - (int) $line->quantity
-            ];
-            $this->storageRepository->addStorage($dataStorage);
-        }
 
         if ($request->session()->has('promotion')) {
             $code = session()->get('promotion');
-            $this->promotionRepository->updateStatusCodeByCode($code, 'used');
+            $promotion = $this->promotionRepository->getPromotionByCode($code);
+            $percent = $promotion->percent;
+            // $this->promotionRepository->updateStatusCodeByCode($code, 'used');
             $request->session()->forget('promotion');
         }
-        
-        return view('vnpay_php.vnpay_return');
+
+        return view('vnpay_php.vnpay_return', compact('code', 'percent'));
     }
 
     public function paymentFail(Request $request)
     {
         $data = new \stdClass();
-        $this->paymentRepository->update($request->paymentid, 'Thất bại');
 
+        $this->paymentRepository->update($request->paymentid, 'Thất bại');
+        // $request->status_payment="Thất bại";
         $data->textError = 'Thanh toán thất bại. Vui lòng thử lại';
 
         return view('pages.buy-fail', ['data' => $data]);

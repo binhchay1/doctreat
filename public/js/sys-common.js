@@ -52,6 +52,13 @@
                 window.location.href = url;
             })
         },
+        cancelSchedule: function () {
+            $('#cancel-schedule .modal-title').text('Báo bận');
+            $("#cancel-schedule").modal("show");
+            $('#cancel-schedule .modal-footer #ok').click(function () {
+                $('form#form-cancel').submit();
+            })
+        },
     }
 
     $('#user-table-list .delete_user').click(function () {
@@ -68,6 +75,10 @@
 
     $('#product-table-list .delete_user').click(function () {
         return globalThis.diamondPetAMIN.deleteProduct($(this));
+    });
+
+    $('.cancel_schedule').click(function () {
+        return globalThis.diamondPetAMIN.cancelSchedule($(this));
     });
 
 })(jQuery, window, document);

@@ -2,6 +2,37 @@
 
 @section('content')
 <section>
+     <!-- Testimonial End -->
+
+     <div class="container py-5">
+        <div class="col-md-12">
+            <div class="service-item bg-light d-flex p-4 flex-column">
+                <p class="text-success text-bold h3 text-center">Các dịch vụ và bác sĩ chuyên ngành</p>
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col">Tên dịch vụ</th>
+                            <th scope="col">Gía tiền</th>
+                            <th scope="col">Bác sĩ chuyên ngành</th>
+                            <th scope="col">SĐT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($services as $service)
+                        @if(isset($service->user))
+                        <tr>
+                            <td class="text-center">{{ $service->name }}</td>
+                            <td class="text-center">{{ $service->price }}</td>
+                            <td class="text-center">{{ $service->user->name }}</td>
+                            <td class="text-center">{{ $service->user->phone }}</td>
+                        </tr>
+                        @endif
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
     <!-- Services Start -->
     <div class="container-fluid py-5">
         <div class="container">
@@ -76,7 +107,7 @@
     <!-- Services End -->
 
 
-    <!-- Testimonial Start -->
+    <!-- Testimonial Start
     <div class="container-fluid bg-testimonial py-5" style="margin: 45px 0;">
         <div class="container py-5">
             <div class="row justify-content-end">
@@ -110,36 +141,8 @@
                 </div>
             </div>
         </div>
-    </div>
-    <!-- Testimonial End -->
-
-    <div class="container py-5">
-        <div class="col-md-12">
-            <div class="service-item bg-light d-flex p-4 flex-column">
-                <p class="text-success text-bold h3 text-center">Chúng tôi hiện tại đang phục vụ thêm các dịch vụ theo lịch với bác sĩ riêng</p>
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th scope="col">Tên dịch vụ</th>
-                            <th scope="col">Gía tiền</th>
-                            <th scope="col">Bác sĩ</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($services as $service)
-                        @if(isset($service->user))
-                        <tr>
-                            <td class="text-center">{{ $service->name }}</td>
-                            <td class="text-center">{{ $service->price }}</td>
-                            <td class="text-center">{{ $service->user->name }}</td>
-                        </tr>
-                        @endif
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    </div> -->
+   
 
 </section>
 

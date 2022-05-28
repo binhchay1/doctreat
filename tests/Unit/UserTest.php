@@ -4,29 +4,41 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use App\Models\User;
-use Illuminate\Http\Response;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
+    protected $user;
 
-    public function setUp()  : void
+    protected function setUp(): void
     {
         parent::setUp();
-        $this->artisan('passport:install');
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
-        User::factory()->create();
+        $this->user = new User();
     }
-    /**
-     * A basic unit test example.
-     *
-     * @return void
-     */
-    public function testApiClientLoginPassed()
+
+    protected function tearDown(): void
     {
-        $data = ['email' => $this->user->email, 'password' => '123456789'];
-        $response = $this->json('POST', '/login', $data);
-        $response->assertStatus(Response::HTTP_ACCEPTED)->assertJsonStructure(['data']);
+        parent::tearDown();
+        unset($this->user);
+    }
+
+    public function test_table_name()
+    {
+        $this->assertEquals('users', $this->user->getTable());
+    }
+
+    public function test_fillable()
+    {
+        $this->assertEquals([
+            'name',
+            'email',
+            'password',
+            'role',
+            'phone',
+            'gender',
+            'cmt',
+            'dob',
+            'status_delete',
+            'email_verified_at'
+        ], $this->user->getFillable());
     }
 }

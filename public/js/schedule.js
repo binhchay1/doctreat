@@ -54,11 +54,6 @@ $(function () {
         events: schedule,
         editable: true,
         droppable: true,
-        drop: function (info) {
-            if (checkbox.checked) {
-                info.draggedEl.parentNode.removeChild(info.draggedEl);
-            }
-        },
         eventClick: function (info) {
             let url = '/admin/get-info-schedule';
             $.ajax({
@@ -66,51 +61,65 @@ $(function () {
                 type: 'GET',
                 dataType: 'html',
                 data: {
-                    id: info.event.id
+                    id: info.event.id,
+                    status: info.event.backgroundColor
                 }
             }).done(function (result) {
                 result = JSON.parse(result);
-                let name = $('#info-schedule #name');
-                let date = $('#info-schedule #date');
-                let hours = $('#info-schedule #hours');
-                let note = $('#info-schedule #note');
-                let status = $('#info-schedule #status');
-                name.val(result.name);
-                date.val(result.date);
-                hours.val(result.hours);
-                note.val(result.note);
+                if (result.typeStatus == 'busy') {
+                    let date = $('#info-cancel-schedule #date');
+                    let hours = $('#info-cancel-schedule #hours');
+                    let note = $('#info-cancel-schedule #note');
+                    let status = $('#info-cancel-schedule #status');
+                    date.val(result.date);
+                    hours.val(result.hours);
+                    note.val(result.note);
+                    status.val('Đã báo bận');
 
-                if (result.status == 1) {
-                    status.val('Đã đồng ý');
-                } else if (result.status == 2) {
-                    status.val('Đã hủy');
+                    $('#info-cancel-schedule').modal('show');
                 } else {
-                    status.val('Đang chờ xét duỵêt');
-                }
+                    let name = $('#info-schedule #name');
+                    let date = $('#info-schedule #date');
+                    let hours = $('#info-schedule #hours');
+                    let note = $('#info-schedule #note');
+                    let status = $('#info-schedule #status');
+                    name.val(result.name);
+                    date.val(result.date);
+                    hours.val(result.hours);
+                    note.val(result.reason);
 
-                if (result.status != null) {
-                    $('#info-schedule .modal-footer').addClass('d-none');
-                    $('#info-schedule select').addClass('d-none');
-                } else {
-                    let elementA = document.querySelector('#info-schedule .modal-footer');
-                    let elementB = document.querySelector('#info-schedule select');
-                    let hasA = elementA.classList.contains('d-none');
-                    let hasB = elementB.classList.contains('d-none');
-                    if (hasA) {
-                        $('#cmt-selection').removeClass('d-none');
+                    if (result.status == 1) {
+                        status.val('Đã đồng ý');
+                    } else if (result.status == 2) {
+                        status.val('Đã hủy');
+                    } else {
+                        status.val('Đang chờ xét duỵêt');
                     }
 
-                    if (hasB) {
-                        $('#cmt-selection').removeClass('d-none');
-                    }
-                }
+                    if (result.status != null) {
+                        $('#info-schedule .modal-footer').addClass('d-none');
+                        $('#info-schedule select').addClass('d-none');
+                    } else {
+                        let elementA = document.querySelector('#info-schedule .modal-footer');
+                        let elementB = document.querySelector('#info-schedule select');
+                        let hasA = elementA.classList.contains('d-none');
+                        let hasB = elementB.classList.contains('d-none');
+                        if (hasA) {
+                            $('#cmt-selection').removeClass('d-none');
+                        }
 
-                $('#info-schedule').modal('show');
-                $('#info-schedule .modal-footer #ok').click(function () {
-                    let status = $('#info-schedule .modal-body select').val();
-                    let url = "/admin/schedule/edit/status?id=" + parseInt(info.event.id) + '&status=' + parseInt(status);
-                    window.location.href = url;
-                })
+                        if (hasB) {
+                            $('#cmt-selection').removeClass('d-none');
+                        }
+                    }
+
+                    $('#info-schedule').modal('show');
+                    $('#info-schedule .modal-footer #ok').click(function () {
+                        let status = $('#info-schedule .modal-body select').val();
+                        let url = "/admin/schedule/edit/status?id=" + parseInt(info.event.id) + '&status=' + parseInt(status);
+                        window.location.href = url;
+                    })
+                }
             });
         }
     });

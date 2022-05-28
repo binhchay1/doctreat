@@ -67,8 +67,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['permission.admin.page']], f
             Route::get('/add', [ProductController::class, 'createProduct'])->name('admin.create.products');
             Route::get('/update/{product}', [ProductController::class, 'viewUpdateProduct'])->name('admin.update.products.view');
             Route::post('/update/{product}', [ProductController::class, 'updateProduct'])->name('admin.update.products');
+            Route::post('/update', [ProductController::class, 'updateProduct'])->name('admin.update.product.test');
             Route::post('/store', [ProductController::class, 'storeProduct'])->name('admin.store.products');
             Route::get('/delete/{id}', [ProductController::class, 'deleteProduct'])->name('admin.delete.products');
+            Route::get('/delete', [ProductController::class, 'deleteProduct'])->name('admin.delete.products.test');
         });
 
         Route::group(['prefix' => 'service'], function () {
@@ -95,6 +97,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['permission.admin.page']], f
         Route::group(['prefix' => 'schedule'], function () {
             Route::get('/', [ScheduleController::class, 'index'])->name('admin.schedule.index');
             Route::get('/edit/status', [ScheduleController::class, 'editStatus'])->name('admin.status.schedule');
+            Route::post('/cancel-schedule', [ScheduleController::class, 'cancelSchedule'])->name('admin.cancel.schedule');
+            Route::get('/cancel-schedule-change', [ScheduleController::class, 'cancelScheduleChange'])->name('admin.cancel.schedule.change');
         });
     });
 
@@ -115,6 +119,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['permission.admin.page']], f
             Route::get('/', [AdminController::class, 'orderView'])->name('admin.order.index');
             Route::get('/edit/status', [AdminController::class, 'editStatusOrder'])->name('admin.status.order');
         });
+        Route::get('/get-detail-order', [AdminController::class, 'getDetailOrder']);
     });
 
     Route::group(['prefix' => 'doctor', 'middleware' => ['permission.doctor']], function () {
@@ -127,7 +132,6 @@ Route::group(['middleware' => ['permission.visiter']], function () {
     Route::get('/contact', [FeatureController::class, 'viewContact']);
     Route::get('/send-contact', [FeatureController::class, 'sendContact']);
     Route::get('/about', [FeatureController::class, 'viewAbout']);
-    Route::get('/blog', [FeatureController::class, 'viewBlog']);
     Route::get('/service', [FeatureController::class, 'viewService']);
     Route::get('/profile', [FeatureController::class, 'viewProfile']);
     Route::get('/history', [FeatureController::class, 'viewHistory']);
@@ -154,7 +158,7 @@ Route::group(['middleware' => ['permission.visiter']], function () {
     Route::get('/payment-fail', [VNPAYController::class, 'paymentFail']);
 
     Route::group(['middleware' => ['permission.users']], function () {
-        Route::get('/schedule', [ScheduleController::class, 'viewSchedule']);
+        Route::get('/schedule', [ScheduleController::class, 'viewSchedule'])->name('schedule.pages.view');
         Route::post('/schedule-book', [ScheduleController::class, 'bookSchedule'])->name('schedule.book');
         Route::get('/schedule-confirmed', [ScheduleController::class, 'viewScheduleConfirmed'])->name('schedule.confirmed');
     });

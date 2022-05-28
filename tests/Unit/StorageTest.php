@@ -2,10 +2,12 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Faker\Factory as Faker;
-use App\Repositories\storageRepository;
-use App\Models\storage;
+use App\Repositories\StorageRepository;
+use App\Repositories\StorageHistoryRepository;
+use App\Models\Storage;
+use App\Models\StorageHistory;
 
 class StorageTest extends TestCase
 {
@@ -17,25 +19,26 @@ class StorageTest extends TestCase
         parent::setUp();
         $this->faker = Faker::create();
         $this->storage = [
-            'product_id' => $this->faker->id,
+            'product_id' => $this->faker->randomDigit,
             'quantity' => 0
         ];
 
         $this->storageHistory = [
-            'product_id' => $this->faker,
-            'last_quantity' => $this->faker->add_quantity,
-            'add_quantity' => $this->faker->add_quantity,
-            'note' => $this->faker->note,
-            'employee' => $this->faker->employee,
-            'employee_id' => $this->faker->employee_id,
-            'status' => '3'
+            'product_id' => $this->faker->randomDigit,
+            'last_quantity' => $this->faker->randomDigit,
+            'add_quantity' => $this->faker->randomDigit,
+            'note' => $this->faker->text,
+            'employee' => $this->faker->text,
+            'employee_id' => $this->faker->randomDigit,
+            'status' => '3',
+            'invoice' => $this->faker->text,
+            'type' => $this->faker->text
         ];
 
-        $this->storageRepository = new storageRepository();
-        $this->storageHistoryRepository = new storageRepository();
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+        $this->storageRepository = new StorageRepository();
+        $this->storageHistoryRepository = new StorageHistoryRepository();
     }
-    
+
     public function testStore()
     {
         $storage = $this->storageRepository->create($this->storage);
@@ -48,23 +51,18 @@ class StorageTest extends TestCase
 
     public function testEditStatus()
     {
-        $id = $this->faker->id;
-        $status = $this->faker->status;
-        $product_id = $this->faker->product_id;
-        $quantity = $this->faker->quantity;
-
-        $lastQuantity = $this->storageRepository->getLastQuantity($product_id);
-        $edit_status = $this->storageHistoryRepository->updateStatus($id, $status);
-
+        $status = $this->faker->randomDigit;
+        $storage = $this->storageRepository->create($this->storage);
         $dataStorage = [
-            'product_id' => $product_id,
-            'quantity' => (int) $lastQuantity->quantity + $quantity
+            'product_id' => $storage->product_id,
+            'quantity' => $this->faker->randomDigit
         ];
 
+        $storageHistory = $this->storageHistoryRepository->create($this->storageHistory);
+        $edit_status = $this->storageHistoryRepository->updateStatus($storageHistory->id, $status);
         $updateStorage = $this->storageRepository->addStorage($dataStorage);
-
-        $this->assertInstanceOf(Storage::class, $newStorage);
-        $this->assertEquals($updateStorage, 1);
-        $this->assertEquals($edit_status, 1);
+        
+        $this->assertEquals($updateStorage, 1, 0);
+        $this->assertEquals($edit_status, 1, 0);
     }
 }

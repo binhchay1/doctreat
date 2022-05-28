@@ -62,7 +62,7 @@ class StorageHistoryExport implements FromCollection, WithHeadings, WithMapping,
             $row->add_quantity ? $row->add_quantity : 'N/A',
             $row->status ? $row->status : 'N/A',
             $row->employee ? $row->employee : 'N/A',
-            $row->created_at ? date("d F, Y, H:i e", strtotime($row->created_at)) : 'N/A',
+            $row->created_at ? date("d F, Y", strtotime($row->created_at)) : 'N/A',
         ];
     }
 }

@@ -9,7 +9,7 @@
   
     <p>Cám ơn quý khách đã tin dùng và mua sản phẩm của Diamond Pet. Bạn có thể kiểm tra lại hóa đơn qua đường dẫn bên dưới đây : </p>
     
-    <a href="{{ $mailData['url'] }}"></a>
+    <a href="{{ $mailData['url'] }}">{{ $mailData['url'] }}</a>
 
     <p>Cám ơn!</p>
 </body>

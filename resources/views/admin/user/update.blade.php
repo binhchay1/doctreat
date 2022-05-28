@@ -49,12 +49,6 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label  class="col-sm-2 col-form-label">CMT</label>
-                            <div class="col-sm-10 col-form-input">
-                                <input type="text" name="cmt" value="{{ old('cmt', $user->cmt ?? null) }}" class="form-control" style="width: 40%;">
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label  class="col-sm-2 col-form-label">Địa chỉ</label>
                             <div class="col-sm-10 col-form-input">
                                 <input type="text" name="address" value="{{ old('address', $user->address ?? null) }}" class="form-control" style="width: 40%;">

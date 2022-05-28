@@ -43,6 +43,7 @@ class ProductController extends Controller
         $categories = $this->productRepository->getCategoriesAndCount();
 
         if ($request->arrange) {
+            // tìm theo giá lớn nhất
             if ($request->arrange == 'high') {
                 if ($request->category) {
                     $products = $this->productRepository->getListProductWithHighToLowPrice($request->category);
@@ -50,7 +51,7 @@ class ProductController extends Controller
                     $products = $this->productRepository->getListProductWithHighToLowPrice();
                 }
             }
-
+            // tìm theo giá nhỏ nhât
             if ($request->arrange == 'low') {
                 if ($request->category) {
                     $products = $this->productRepository->getListProductWithLowToHighPrice($request->category);
@@ -73,8 +74,8 @@ class ProductController extends Controller
                     }
                     $product->total = $total;
                 }
-
-                $products = $products->sortBy('total');
+                
+                $products = $products->setCollection($products->sortByDesc('total'));
             }
         }
 
@@ -124,6 +125,7 @@ class ProductController extends Controller
 
             $path = '/uploads/product';
             $image = $request->file('img');
+             //Lấy Tên files
             $image_name = $image->getClientOriginalName();
             $image_add = $image_name . "_" . time();
             $image->move(public_path($path), $image_add);
@@ -180,18 +182,17 @@ class ProductController extends Controller
         return redirect()->route('admin.products.index');
     }
 
-    public function deleteProduct(int $productId)
+    public function deleteProduct(int $productId = 0)
     {
+        if(request()->get('id')) {
+            $productId = (int) request()->get('id');
+        }
+
         $product = $this->productRepository->deleteById($productId);
         $storage = $this->storageRepository->deleteByProductId($productId);
         $history = $this->storageHistoryRepository->updateStatusByProductId($productId, \App\Enums\StatusStorage::DELETED);
 
-        if ($product && $storage && $history) {
-            alert()->success('Thành công!', 'Xóa sản phẩm thành công!');
-        } else {
-            alert()->warning('Cảnh báo!', 'Xóa sản phẩm lỗi!');
-        }
-
+        alert()->success('Thành công!', 'Xóa sản phẩm thành công!');
         return redirect()->route('admin.products.index');
     }
 

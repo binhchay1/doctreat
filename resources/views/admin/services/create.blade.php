@@ -21,7 +21,7 @@
         <div class="container-fluid">
             <div class="row form-area">
                 <div class="col-md-12 form-header text-center">
-                    <h1 class="form-title fs-20 pd5">Thêm tài khoản</h1>
+                    <h1 class="form-title fs-20 pd5">Thêm dịch vụ</h1>
                 </div>
                 <div class="col-md-12 form-body">
                     <div class="form-group row">

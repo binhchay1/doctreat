@@ -51,7 +51,7 @@
                             <th>Tên khách hàng</th>
                             <th>Số điện thoại</th>
                             <th>Địa chỉ</th>
-                            <th>Tổng tiền</th>
+                            <!-- <th>Tổng tiền</th> -->
                             <th>Trạng thái</th>
                             <th>Thanh toán</th>
                             <th>Chức năng</th>
@@ -66,14 +66,19 @@
                             <td>{{ $item->name_customer }}</td>
                             <td>{{ $item->phone_customer }}</td>
                             <td>{{ $item->address_customer }}</td>
-                            <td>
+                            <!-- <td>
                                 {{ !$item->orderLine->isEmpty() ? $item->total : "N/A"  }}
-                            </td>
+                            </td> -->
                             <td>{{ $item->status }}</td>
                             <td>{{ $item->payment->status_payment }}</td>
+                            @if($item->status != "Giao hàng thất bại" and $item->status != "Đã giao hàng" and $item->payment->status_payment  != 'Thất Bại')
                             <td>
                                 <a href="javascript:void(0)" class="btn btn-success edit_status_order" data-id="{{ $item->id }}"><i class="fas fa-edit"></i></a>
                             </td>
+                            @else
+                            <td>
+                            </td>
+                            @endif
                         </tr>
                         @endif
                         @endforeach

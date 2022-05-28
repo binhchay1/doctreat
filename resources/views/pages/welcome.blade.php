@@ -46,7 +46,7 @@
 
 
     <!-- About Start -->
-    <div class="container-fluid py-5">
+    <!-- <div class="container-fluid py-5">
         <div class="container">
             <div class="row gx-5">
                 <div class="col-lg-5 mb-5 mb-lg-0" style="min-height: 500px;">
@@ -81,12 +81,12 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- About End -->
 
 
     <!-- Services Start -->
-    <div class="container-fluid py-5">
+    <!-- <div class="container-fluid py-5">
         <div class="container">
             <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
                 <h6 class="text-primary text-uppercase">Dịch vụ</h6>
@@ -155,11 +155,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Services End -->
 
     <!-- Products Start -->
-    <div class="container-fluid py-5">
+    <!-- <div class="container-fluid py-5">
         <div class="container">
             <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
                 <h6 class="text-primary text-uppercase">Sản phẩm</h6>
@@ -197,11 +197,11 @@
                 @endforeach
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Products End -->
 
     <!-- Offer Start -->
-    <div class="container-fluid bg-offer my-5 py-5">
+    <!-- <div class="container-fluid bg-offer my-5 py-5">
         <div class="container py-5">
             <div class="row gx-5 justify-content-start">
                 <div class="col-lg-7">
@@ -215,11 +215,11 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Offer End -->
 
     <!-- Team Start -->
-    <div class="container-fluid py-5">
+    <!-- <div class="container-fluid py-5">
         <div class="container">
             <div class="border-start border-5 border-primary ps-5 mb-5" style="max-width: 600px;">
                 <h6 class="text-primary text-uppercase">Đội ngũ</h6>
@@ -308,7 +308,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
     <!-- Team End -->
 
 

@@ -20,6 +20,23 @@ class ProductRepository extends BaseRepository
         return Product::class;
     }
 
+    public function destroy($id)
+    {
+        return Product::where('id', $id)->delete();
+    }
+
+    public function create(array $data)
+    {
+        return Product::create($data);
+    }
+
+    public function show($id)
+    {
+        $query = $this->model->query();
+
+        require $query->where('id', $id)->get();
+    }
+
     public function getListProduct($filter = [])
     {
         $query = $this->model->query();
@@ -54,11 +71,6 @@ class ProductRepository extends BaseRepository
     public function getAll()
     {
         return $this->model->query()->get();
-    }
-
-    public function saleInYear()
-    {
-        $query = $this->model->query();
     }
 
     public function getCategoriesAndCount()
@@ -111,5 +123,23 @@ class ProductRepository extends BaseRepository
         $query = $query->with('orderLine');
 
         return $query->paginate($limit);
+    }
+
+    public function getLastProductByTime() {
+        $query = $this->model->query();
+
+        return $query->orderBy('created_at', 'desc')->first();
+    }
+
+    public function checkProductNotExists($id) {
+        $query = $this->model->query();
+
+        $query = $query->where('id', $id)->count();
+
+        if($query == 0) {
+            return true;
+        }
+        
+        return false;
     }
 }

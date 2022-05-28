@@ -33,7 +33,7 @@ class StorageRequest extends FormRequest
     {
         return [
             'quantity.required' => 'Số lượng không được để trống.',
-            'img.required' => 'Hóa đơn không được để trống.',
+            'img.required' => 'Ảnh không được để trống.',
         ];
     }
 }

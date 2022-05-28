@@ -56,7 +56,7 @@
                             <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
                             <div class="text-start">
                                 <h6 class="text-uppercase mb-1">Email</h6>
-                                <span>diamondPet.store@gmail.com</span>
+                                <span>diamondPetdiamond@gmail.com</span>
                             </div>
                         </div>
                         <div class="d-flex align-items-center mb-4">

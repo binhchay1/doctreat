@@ -22,7 +22,7 @@ class ServiceController extends Controller
         $this->userRepository = $userRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $filters = [];
         if (isset($request->name)) {

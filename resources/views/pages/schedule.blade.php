@@ -36,7 +36,7 @@
                 <div class="card ml-5" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">Chọn ngày</h5>
-                        <input type="date" id="date" name="date" class="form-control" name="date" value="{{ date('Y-m-d') }}" required>
+                        <input type="date" id="date" name="date" class="form-control" name="date" value="{{ $date }}" onchange="changeDate()" required>
                     </div>
                 </div>
                 <div class="card ml-5" style="width: 18rem;">
@@ -44,7 +44,11 @@
                         <h5 class="card-title">Chọn thời gian</h5>
                         <select class="form-control" style="background-color: white !important;" name="hours" required>
                             @foreach ($timers as $time)
-                            <option value="{{ $time }}">{{ $time }}</option>
+                            @if($time->active)
+                            <option value="{{ $time->hours }}">{{ $time->hours }}</option>
+                            @else
+                            <option value="{{ $time->hours }}" disabled style="background-color: black">{{ $time->hours }}</option>
+                            @endif
                             @endforeach
                         </select>
                     </div>
@@ -53,19 +57,53 @@
                     <div class="card-body">
                         <h5 class="card-title">Ghi chú</h5>
                         <textarea class="form-control" style="background-color: white !important; resize: none;" name="note"></textarea>
+                        @if ($errors->has('note'))
+                        <p class="help is-danger" style="color: red;">{{ $errors->first('note') }}</p>
+                        @endif
                     </div>
                 </div>
             </div>
+            <div>
+                <p class="mt-2">Lịch báo bận của bác sĩ</p>
+                <ul class="list-group">
+                    @if($cancelSchedule->isEmpty())
+                    <p>Trống</p>
+                    @else
+                    @foreach ($cancelSchedule as $cancel)
+                    <li class="list-group-item d-flex align-items-center">
+                        <span>{{ $cancel->reason }}</span>
+                        <span class="badge bg-primary rounded-pill ml-3" style="margin: 10px;">{{ $cancel->hours }}</span>
+                    </li>
+                    @endforeach
+                    @endif
+                </ul>
+            </div>
+            <div>
+                <p class="mt-2">Lịch đã được đặt của bác sĩ</p>
+                <ul class="list-group">
+                    @if($schedules->isEmpty())
+                    <p>Trống</p>
+                    @else
+                    @foreach ($schedules as $schedule)
+                    <li class="list-group-item d-flex align-items-center">
+                        <span>{{ $schedule->customer_phone }}</span>
+                        <span class="badge bg-primary rounded-pill ml-3" style="margin: 10px;">{{ $schedule->hours }}</span>
+                    </li>
+                    @endforeach
+                    @endif
+                </ul>
+            </div>
+
             <div class="form-group mt-5 d-flex flex-row-reverse">
                 <button class="btn btn-primary">Xác nhận</button>
             </div>
         </form>
         @else
         <div class="gy-5 d-flex justify-content-center">
-        <p class="text-center h2">Hiện tại không có dữ liệu nào về lịch của bác sĩ. Xin vui lòng quay lại sau!</p>
+            <p class="text-center h2">Hiện tại không có dữ liệu nào về lịch của bác sĩ. Xin vui lòng quay lại sau!</p>
         </div>
         @endif
     </div>
 </section>
-
+<script src="{{ URL::to('js/pages/schedule.js') }}"></script>
 @endsection

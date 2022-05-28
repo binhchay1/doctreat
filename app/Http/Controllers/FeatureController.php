@@ -11,6 +11,8 @@ use App\Repositories\InvoiceRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\PromotionRepository;
 use App\Repositories\ServiceRepository;
+use App\Repositories\OrderLineRepository;
+use App\Repositories\StorageRepository;
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\ContactRequest;
 use Illuminate\Http\Request;
@@ -21,26 +23,32 @@ use Cart;
 class FeatureController extends Controller
 {
     private ProductRepository $productRepository;
+    private OrderLineRepository $orderLineRepository;
     private PaymentRepository $paymentRepository;
     private InvoiceRepository $invoiceRepository;
     private PromotionRepository $promotionRepository;
     private UserRepository $userRepository;
     private ServiceRepository $serviceRepository;
+    private StorageRepository $storageRepository;
 
     public function __construct(
         ProductRepository $productRepository,
+        OrderLineRepository $orderLineRepository,
         PaymentRepository $paymentRepository,
         InvoiceRepository $invoiceRepository,
         UserRepository $userRepository,
         PromotionRepository $promotionRepository,
-        ServiceRepository $serviceRepository
+        ServiceRepository $serviceRepository,
+        StorageRepository $storageRepository
     ) {
         $this->productRepository = $productRepository;
+        $this->orderLineRepository=$orderLineRepository;
         $this->paymentRepository = $paymentRepository;
         $this->invoiceRepository = $invoiceRepository;
         $this->promotionRepository = $promotionRepository;
         $this->userRepository = $userRepository;
         $this->serviceRepository = $serviceRepository;
+        $this->storageRepository = $storageRepository;
     }
 
     public function viewWelcome()
@@ -60,11 +68,6 @@ class FeatureController extends Controller
         return view('pages.about');
     }
 
-    public function viewBlog()
-    {
-        return view('pages.blog');
-    }
-
     public function viewProduct()
     {
         return view('pages.product');
@@ -81,6 +84,7 @@ class FeatureController extends Controller
     {
         if (Auth::check()) {
             $dob = Auth::user()->dob;
+            //tách ngày tháng năm
             $explode = explode('-', $dob);
 
             $data['day'] = $explode[2];
@@ -99,10 +103,13 @@ class FeatureController extends Controller
             $id = Auth::user()->id;
             $data = [];
             $total_cost = 0;
+            //timg payment theo id
             $payments = $this->paymentRepository->getPaymentByUsersId($id);
 
             foreach ($payments as $history) {
+                //liệt kê code
                 $history->code = $history->payment_code;
+                
                 $history->date = $history->order_date;
 
                 $history->total_buy = $this->paymentRepository->countTotalBuy($id);
@@ -135,7 +142,7 @@ class FeatureController extends Controller
         $user = Auth::user();
 
         $userPassword = $user->password;
-
+        
         if (!Hash::check($request->current_password, $userPassword)) {
             return back()->withErrors(['current_password' => 'Xác nhận mật khẩu không trùng khớp']);
         }
@@ -171,7 +178,7 @@ class FeatureController extends Controller
     public function invoice(Request $request)
     {
         $cartItems = Cart::getContent();
-
+        
         if ($cartItems->isEmpty()) {
             $url = '/invoice-check?payment_code=' . $request->payment_code;
             return redirect($url);
@@ -183,7 +190,19 @@ class FeatureController extends Controller
             $total = $total + $totalCostByItem;
         }
         Cart::clear();
+        
         $payment = $this->paymentRepository->getPaymentByCode($request->payment_code);
+        $order_line = $this->orderLineRepository->getOrderLineByOrder($payment->order_id);
+       
+        foreach ($order_line as $line) {
+            $getLastQuantity = $this->storageRepository->getLastQuantity($line->product_id);
+            $dataStorage = [
+                'product_id' => $line->product_id,
+                'quantity' => (int) $getLastQuantity->quantity - (int) $line->quantity
+            ];
+            $this->storageRepository->addStorage($dataStorage);
+        }
+
         $this->paymentRepository->update($payment->id, 'Thành công');
 
         $data['name_customer'] = $payment->name_customer;

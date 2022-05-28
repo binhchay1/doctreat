@@ -98,7 +98,7 @@
                         <i class="bi bi-envelope-open fs-1 text-primary me-3"></i>
                         <div class="text-start">
                             <h6 class="text-uppercase mb-1">Email</h6>
-                            <span>diamondPet.store@gmail.com</span>
+                            <span>diamondPetdiamond@gmail.com</span>
                         </div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                             <h5 class="text-uppercase border-start border-5 border-primary ps-3 mb-4">Thông tin liên lạc</h5>
                             <p class="mb-4">Hãy liên lạc với chúng tôi ngay để có được những tư vấn hữu ích nhất</p>
                             <p class="mb-2"><i class="bi bi-geo-alt text-primary me-2"></i>Hòa Lạc campus, Sơn Tây, Hà Nội</p>
-                            <p class="mb-2"><i class="bi bi-envelope-open text-primary me-2"></i>diamondPet.store@gmail.com</p>
+                            <p class="mb-2"><i class="bi bi-envelope-open text-primary me-2"></i>diamondPetdiamond@gmail.com</p>
                             <p class="mb-0"><i class="bi bi-telephone text-primary me-2"></i>0934-232-323</p>
                         </div>
                         <div class="col-lg-2 col-md-0">

@@ -10,8 +10,10 @@
             <div class="modal-body">
                 <p>Modal body text goes here.</p>
                 <select class="form-control">
+                    <option value="Đang chuẩn bị đơn hàng">Đang chuẩn bị đơn hàng</option>
                     <option value="Đang giao hàng">Đang giao hàng</option>
                     <option value="Đã giao hàng">Đã giao hàng</option>
+                    <option value="Giao hàng thất bại">Giao hàng thất bại</option>
                 </select>
             </div>
             <div class="modal-footer">

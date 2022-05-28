@@ -40,7 +40,6 @@
                             <th scope="col">Tên</th>
                             <th scope="col">Gía</th>
                             <th scope="col">Bác sĩ phụ trách</th>
-                            <th scope="col">Trạng thái</th>
                             <th scope="col">Chức năng</th>
                         </tr>
                     </thead>
@@ -54,7 +53,6 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ number_format($item->price, 2) }} VNĐ</td>
                             <td>{{ $item->user->name }}</td>
-                            <td>{{ $item->status == 1 ? 'Đang hoạt động' : 'Đã tạm ngưng' }}</td>
                             <td>
                                 <a href="{{ route('admin.update.service.view', $item->id)  }}" class="btn btn-success" role="button"><i class="fas fa-edit"></i></a>
                                 <a href="{{ route('admin.delete.service', $item->id)  }}" class="btn btn-danger" role="button"><i class="fas fa-lock"></i></a>

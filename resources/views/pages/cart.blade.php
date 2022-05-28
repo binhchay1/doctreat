@@ -49,17 +49,7 @@
 
                         </tbody>
                     </table>
-                    <div class="d-flex flex-row-reverse">
-                        @if(isset($_GET['code']) && isset($_GET['status']))
-                        @if($_GET['status'] == 1)
-                        <b class="h4">Total: ${{ number_format(((int) Cart::getTotal() - ((int) Cart::getTotal() * (int) $_GET['percent']) / 100), 3, ',') }}</b>
-                        @else
-                        <b class="h4">Total: ${{ Cart::getTotal() }}</b>
-                        @endif
-                        @else
-                        <b class="h4">Total: ${{ Cart::getTotal() }}</b>
-                        @endif
-                    </div>
+                    
                     <div class="d-flex flex-row-reverse flex-row">
                         <form method="post" action="{{ route('input.promotion.code') }}" class="form-horizontal">
                             @csrf

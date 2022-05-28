@@ -18,6 +18,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\InvoiceRepository;
 use App\Repositories\ServiceRepository;
 use App\Repositories\InvoiceDoctorRepository;
+use App\Repositories\CancelScheduleRepository;
 use App\Models\Order;
 use App\Models\InvoiceDoctor;
 use stdClass;
@@ -36,6 +37,7 @@ class AdminController extends Controller
     private InvoiceRepository $invoiceRepository;
     private ServiceRepository $serviceRepository;
     private InvoiceDoctorRepository $invoiceDoctorRepository;
+    private CancelScheduleRepository $cancelScheduleRepository;
 
     public function __construct(
         OrderRepository $orderRepository,
@@ -47,7 +49,8 @@ class AdminController extends Controller
         UserRepository $userRepository,
         InvoiceRepository $invoiceRepository,
         ServiceRepository $serviceRepository,
-        InvoiceDoctorRepository $invoiceDoctorRepository
+        InvoiceDoctorRepository $invoiceDoctorRepository,
+        CancelScheduleRepository $cancelScheduleRepository
     ) {
         $this->orderRepository = $orderRepository;
         $this->productRepository = $productRepository;
@@ -59,15 +62,18 @@ class AdminController extends Controller
         $this->invoiceRepository = $invoiceRepository;
         $this->serviceRepository = $serviceRepository;
         $this->invoiceDoctorRepository = $invoiceDoctorRepository;
+        $this->cancelScheduleRepository = $cancelScheduleRepository;
     }
 
     public function viewDashBoard()
     {
+        // lấy tất cả  product
         $products = $this->productRepository->getAll();
         foreach ($products as $product) {
+            // liệt kê product theo tháng
             $orderLine = $this->orderLineRepository->getAllByProductIdInMonth($product->id);
             $totalQuantity = 0;
-
+            //tính số lượng order
             foreach ($orderLine as $order) {
                 $totalQuantity = $totalQuantity + $order->quantity;
             }
@@ -76,17 +82,21 @@ class AdminController extends Controller
             $product->totalPrice = $totalQuantity * $product->price;
         }
 
+        // get all schedule trong month
         $schedules = $this->scheduleRepository->getAllScheduleInMonth();
         $data['schedule'] = [];
         foreach ($schedules as $schedule) {
+            /// tìm user
             $customer = $this->userRepository->getNameById($schedule->customer_id);
+            // tìm doctor
             $doctor = $this->userRepository->getById($schedule->doctor_id);
+            // arr
             $obj = new stdClass();
 
             $obj->doctor_name = $doctor->name;
             $obj->customer_name = $customer->name;
             $obj->timer = $schedule->date . ' ' . $schedule->hours;
-
+            $obj->status = $schedule->status;
             $data['schedule'][] = $obj;
         }
 
@@ -115,6 +125,7 @@ class AdminController extends Controller
             $filters['phone'] = $request->phone;
         }
 
+        // tìm order trong năm 
         $order = $this->orderRepository->getAllOrderByYear($filters);
 
         foreach ($order as $item) {
@@ -210,7 +221,8 @@ class AdminController extends Controller
         $userPassword = $user->password;
 
         if (!Hash::check($request->current_password, $userPassword)) {
-            return back()->withErrors(['current_password' => 'Xác nhận mật khẩu không trùng khớp']);
+
+            return back()->withErrors(['current_password', 'Xác nhận mật khẩu không trùng khớp']);
         }
 
         $user->password = Hash::make($request->password);
@@ -316,11 +328,18 @@ class AdminController extends Controller
 
     public function getInforSchedule(Request $request)
     {
-        $schedule = $this->scheduleRepository->getScheduleById($request->id);
-        $name = $this->userRepository->getNameById($schedule->customer_id);
-        $schedule->name = $name->name;
+        if ($request->status != 'red') {
+            $schedule = $this->scheduleRepository->getScheduleById($request->id);
+            $name = $this->userRepository->getNameById($schedule->customer_id);
+            $schedule->name = $name->name;
+            $schedule->typeStatus = 'scheduled';
 
-        return $schedule;
+            return $schedule;
+        } else {
+            $cancelSchedule = $this->cancelScheduleRepository->getCancelScheduleById($request->id);
+            $cancelSchedule->typeStatus = 'busy';
+            return $cancelSchedule;
+        }
     }
 
     public function editStatusOrder(Request $request)
@@ -343,10 +362,10 @@ class AdminController extends Controller
     {
         $schedules = $this->scheduleRepository->getScheduleByDoctorInDay(Auth::user()->id);
         $services = $this->serviceRepository->getListService();
-        
+
         $check = 0;
-        foreach($schedules as $schedule) {
-            if($schedule->status == 1) {
+        foreach ($schedules as $schedule) {
+            if ($schedule->status == 1) {
                 $check = 1;
             }
         }
@@ -359,6 +378,7 @@ class AdminController extends Controller
         if (isset($request->payment_code)) {
             $invoice = $this->invoiceRepository->getInvoiceByPaymentCode($request->payment_code);
             if ($invoice != null) {
+
                 $order = Order::join('order_line', 'order_line.order_id', '=', 'order.id')->join('products', 'order_line.product_id', '=', 'products.id')->where('order.id', $invoice->id)->get();
                 $payment = $this->paymentRepository->getPaymentByCode($invoice->payment_code);
 
@@ -398,6 +418,7 @@ class AdminController extends Controller
         return view('admin.invoice', compact('data'));
     }
 
+    // tạo invoice Doctor
     public function storeInvoiceDoctor(Request $request)
     {
         if (isset($request->services)) {
@@ -415,6 +436,7 @@ class AdminController extends Controller
             ];
 
             $invoice_doctor = $this->invoiceDoctorRepository->create($data);
+            $schedule = $this->scheduleRepository->updateStatus(Auth::user()->id, \App\Enums\StatusSchedule::DOCTOR);
 
             if ($invoice_doctor instanceof InvoiceDoctor) {
                 return 'success';
@@ -426,6 +448,7 @@ class AdminController extends Controller
         }
     }
 
+    // tạo invoicode
     public function createInvoiceCode($length = 10)
     {
         $characters = '0123456789';
@@ -444,7 +467,9 @@ class AdminController extends Controller
         }
     }
 
-    public function deletePromotion(Request $request) {
+    //xóa promotion
+    public function deletePromotion(Request $request)
+    {
         $product = $this->promotionRepository->deleteById($request->id);
 
         if ($product) {

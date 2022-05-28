@@ -91,7 +91,11 @@
                             </div>
                         </div>
                     </div>
-
+                    @if ($products->hasPages())
+        <div class="col-12 clearfix text-right">
+            {{ $products->appends($_GET)->links("pagination::bootstrap-4") }}
+        </div>
+        @endif
                 </div>
             </div>
             <div class="col-xl-3 col-lg-3 col-sm-12 col-xs-12 sidebar-shop-left">
@@ -108,6 +112,7 @@
                             <h3>Loại sản phẩm</h3>
                         </div>
                         <div class="list-group list-group-collapse list-group-sm list-group-tree" data-children=".sub-men" id="category-area">
+                            
                             @foreach($categories as $item)
                             <button class="list-group-item list-group-item-action" title="{{ $item->type }}"> {{ $item->type }} <small class="text-muted">({{ $item->total }})</button></a>
                             @endforeach

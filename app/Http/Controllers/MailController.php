@@ -26,10 +26,12 @@ class MailController extends Controller
             'title' => 'Thư từ DiamondPet.com',
             'body' => 'Thưa quý khách,',
         ];
+        //xem cart hiện tại
         $cartItems = session()->get('cartItems');
         session()->forget('cartItems');
-
+        //lấy hóa đơn
         $payment = $this->paymentRepository->getPaymentById($_GET['payment_id']);
+        //chuyển sang trạng thái thành công
         $payment->update(['status_payment' => 'Thành công']);
         $url = $_SERVER['HTTP_HOST'] . '/invoice-check?payment_code=' . $payment->payment_code;
         $mailData['url'] = $url;

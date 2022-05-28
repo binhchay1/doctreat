@@ -91,7 +91,7 @@
                     if ($secureHash == $vnp_SecureHash) {
                         if ($_GET['vnp_ResponseCode'] == '00') {
                             echo "<span style='color:blue' id='text-response'>GD Thanh cong</span>";
-                            header("refresh:5; url=/invoice?payment_code=" . $_GET['vnp_TxnRef'] . "&total=" . $_GET['vnp_Amount']);
+                            header("refresh:5; url=/invoice?payment_code=" . $_GET['vnp_TxnRef'] . "&total=" . $_GET['vnp_Amount'] . "&promotion=" . $code . "&percent=" . $percent);
                         } else {
                             echo "<span style='color:red' id='text-response'>GD Khong thanh cong</span>";
                             header("refresh:5; url=/payment-fail?payment_code=" . $_GET['vnp_TxnRef']);
@@ -114,7 +114,7 @@
     </div>
 </body>
 <script>
-    var timeleft = 5;
+    var timeleft = 2;
     var downloadTimer = setInterval(function() {
         if (timeleft <= 0) {
             clearInterval(downloadTimer);

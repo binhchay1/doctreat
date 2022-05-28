@@ -13,10 +13,6 @@
                     <option value="1">Chấp thuận</option>
                     <option value="2">Từ chối</option>
                 </select>
-                <div class="mt-2 d-none">
-                    <label class="form-label">Lý do</label>
-                    <textarea class="form-control" style="resize: none;" name="reason"></textarea>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>

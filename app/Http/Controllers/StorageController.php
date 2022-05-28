@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 
 class StorageController extends Controller
 {
+    
     private ProductRepository $productRepository;
     private StorageRepository $storageRepository;
     private StorageHistoryRepository $storageHistoryRepository;
@@ -153,8 +154,9 @@ class StorageController extends Controller
 
     public function exportStorage(Request $request)
     {
+        //tìm số lượng sản phẩm
         $lastQuantity = $this->storageRepository->getLastQuantity($request->product);
-
+        //chuyển data cho phiếu
         $dataHistory = [
             'product_id' => $request->product,
             'last_quantity' => $lastQuantity->quantity,
@@ -164,30 +166,32 @@ class StorageController extends Controller
             'employee_id' => Auth::user()->id,
             'type' => 'export'
         ];
-
+        //trừ đi số lượng sản phẩm
         $dataStorage = [
             'product_id' => $request->product,
             'quantity' => $lastQuantity->quantity - $request->quantity
         ];
-
+        // check dữ liệu ảnh
         if ($request->file()) {
-
+            //update ảnh vào file
             $path = '/uploads/storage';
             $image = $request->file('img');
+            //update tên ảnh
             $image_name = $image->getClientOriginalName();
             $image_add = $image_name . "_" . time();
             $image->move(public_path($path), $image_add);
 
             $dataHistory['invoice'] = "$path/$image_add";
         }
-
+        //kiểm tra ai là người add
         if (Auth::user()->role == \App\Enums\Role::ADMIN) {
             $dataHistory['status'] = \App\Enums\StatusStorage::APPROVED;
         } else {
             $dataHistory['status'] = \App\Enums\StatusStorage::PENDING;
         }
-
+        //tạo lịch sử 
         $storage_history = $this->storageHistoryRepository->create($dataHistory);
+        //update số lượng storage
         $storage = $this->storageRepository->addStorage($dataStorage);
 
         if ($storage_history instanceof StorageHistory and $storage == 1) {

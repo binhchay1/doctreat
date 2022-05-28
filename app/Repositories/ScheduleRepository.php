@@ -25,12 +25,8 @@ class ScheduleRepository extends BaseRepository
         return Schedule::create($data);
     }
 
-    public function getScheduleByCurrentDateAndDoctor($doctor_id, $date = null)
+    public function getScheduleByDateAndDoctor($doctor_id, $date)
     {
-        if ($date == null) {
-            $date = date('Y-m-d');
-        }
-
         $query = $this->model->query();
 
         return $query->where('date', $date)->where('doctor_id', $doctor_id)->get();
@@ -70,6 +66,18 @@ class ScheduleRepository extends BaseRepository
     public function getScheduleByDoctorInDay() {
         $query = $this->model->query();
 
-        return $query->with('user')->where('doctor_id', Auth::user()->id)->whereDate('date', date('Y-m-d'))->get();
+        return $query->with('user')->where('doctor_id', Auth::user()->id)->where('status', '!=', \App\Enums\StatusSchedule::DOCTOR)->whereDate('date', date('Y-m-d'))->get();
+    }
+
+    public function getScheduleByDoctorIdAndDate($doctor_id, $date) {
+        $query = $this->model->query();
+
+        return $query->with('user')->where('doctor_id', $doctor_id)->whereDate('date', $date)->get();
+    }
+
+    public function getLastScheduleByTime() {
+        $query = $this->model->query();
+
+        return $query->orderBy('created_at', 'desc')->first();
     }
 }

@@ -34,8 +34,7 @@ class ServiceRequest extends FormRequest
         return [
             'name.required' => 'Tên không được để trống.',
             'name.string' => 'Tên không đúng định dạng.',
-            'name.regex' => 'Tên không đúng định dạng.',
-            'name.max' => 'Tên không vượt quá 255 kí tự.',
+            'name.max' => 'Tên không vượt quá 100 kí tự.',
             'price.required' => 'Gía không được để trống.',
         ];
     }

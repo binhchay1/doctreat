@@ -60,11 +60,12 @@ var currentUrlWithUser = '';
     });
 
     $('#delete-ticket-storage').on('click', function () {
+        currentTicket--;
+        $('#total-ticket').val(currentTicket);
         let list = document.getElementById("area-add-storage-second");
         if ($('#area-add-storage-second').children().length > 0) {
             list.removeChild(list.children[0]);
-            currentTicket--;
-            if($('#area-add-storage-second').children().length == 0) {
+            if ($('#area-add-storage-second').children().length == 0) {
                 $('#delete-ticket-storage').addClass('d-none');
             }
         }
@@ -94,7 +95,7 @@ var currentUrlWithUser = '';
         $.each(products.data, function (index, value) {
             if (value.id == choice) {
                 $('#quantity-product-export').attr('max', value.quantity.quantity);
-                if(value.quantity.quantity == 0) {
+                if (value.quantity.quantity == 0) {
                     $('#quantity-product-export').attr('disabled', true);
                     $('#create-export-storage').attr('disabled', true);
                 }
@@ -110,7 +111,7 @@ var currentUrlWithUser = '';
             $.each(products.data, function (index, value) {
                 if (value.id == choice) {
                     $('#quantity-product-export').attr('max', value.quantity.quantity);
-                    if(value.quantity.quantity == 0) {
+                    if (value.quantity.quantity == 0) {
                         $('#quantity-product-export').attr('disabled', true);
                         $('#create-export-storage').attr('disabled', true);
                     }
@@ -191,7 +192,6 @@ var currentUrlWithUser = '';
     $('#print-page').click(function () {
         let url = '/admin/store-invoice-doctor';
         let services = parametersService;
-        console.log(services)
         $.ajax({
             url: url,
             type: 'GET',
@@ -215,6 +215,50 @@ var currentUrlWithUser = '';
 
         return false;
     });
+
+    if (typeof statusDate !== 'undefined') {
+        if (statusDate == 1) {
+            let tomorrow = moment().add(1, 'days');
+            $('#date_cancel').attr('min', tomorrow.format('YYYY-MM-DD'));
+            $('#date_cancel').attr('value', tomorrow.format('YYYY-MM-DD'));
+        }
+    }
+
+    if (typeof allTimers !== 'undefined') {
+        for (var i of allTimers) {
+            if (i.status == 1) {
+                let element = $('#timer_cancel option[value="' + i.hours + '"]');
+                element.attr("disabled", 'disabled');
+                element.attr("class", 'bg-dark');
+
+            }
+        }
+    }
+
+    $('#date_cancel').change(function () {
+        let date = $('#date_cancel').val();
+        let url = '/admin/schedule/cancel-schedule-change';
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'html',
+            data: {
+                date: date,
+            }
+        }).done(function (result) {
+            let data = JSON.parse(result);
+            $('#timer_cancel').empty();
+            for (var i of data) {
+                let content = "<option value='" + i.hours + "'>" + i.hours + "</option>";
+                $('#timer_cancel').append(content);
+                if (i.status == 1) {
+                    let element = $('#timer_cancel option[value="' + i.hours + '"]');
+                    element.attr("disabled", 'disabled');
+                    element.attr("class", 'bg-dark');
+                }
+            }
+        });
+    })
 
 })(jQuery, window, document);
 
@@ -358,6 +402,10 @@ function handleChange(service_id, checkbox) {
         let url = currentUrlWithUser + '&service=' + parametersService;
         $('#iframe-doctor-view').attr('src', url);
     }
+}
+
+function setTimers() {
+
 }
 
 jQuery.validator.addMethod('greaterThan', function (value, element, params) {

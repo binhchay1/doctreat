@@ -26,8 +26,8 @@ class UpdateProductRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'price' => ['required'],
-            'description' => ['required'],
-            'type' => ['required']
+            'description' => ['required','max:255'],
+            'type' => ['required','max:40']
         ];
     }
 
@@ -39,7 +39,9 @@ class UpdateProductRequest extends FormRequest
             'name.max' => 'Tên không vượt quá 255 kí tự.',
             'price.required' => 'Gía không được để trống.',
             'description.required' => 'Nội dung không được để trống.',
+            'description.max' => 'Nội dung không vượt quá 255 kí tự.',
             'type.required' => 'Loại không được để trống.',
+            'type.max' => 'Loại không vượt quá 40 kí tự.'
         ];
     }
 }

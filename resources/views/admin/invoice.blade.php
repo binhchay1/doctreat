@@ -77,7 +77,7 @@ $time = str_replace($timeEng, $timeVie, $time);
                         <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td class="align-center content-block" style="text-align: center;">Nếu bạn cần hỗ trợ? Hãy liên hệ với chúng tôi <a href="mailto:">diamondPet.store@gmail.com</a></td>
+                                    <td class="align-center content-block" style="text-align: center;">Nếu bạn cần hỗ trợ? Hãy liên hệ với chúng tôi <a href="mailto:">diamondPetdiamond@gmail.com</a></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -37,11 +37,15 @@
                         </div>
                     </div>
                 </div>
+                
                 @endif
+                
                 @endforeach
             </div>
+            
         </div>
     </div>
+  
     <!-- Products End -->
 
     <!-- Offer Start -->
@@ -61,7 +65,8 @@
         </div>
     </div>
     <!-- Offer End -->
-
+    <td>
+   
     @include('include.shop')
 </section>
 <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>

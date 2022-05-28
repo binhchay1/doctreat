@@ -62,8 +62,9 @@
                         </div>
                     </div>
                 </div>
-
+               
                 <div class="col-sm-12  form-footer pd20 d-inline-block text-right">
+             
                     <button type="submit" class="btn btn-primary" id="create-export-storage">Tạo</button>
                 </div>
             </div>

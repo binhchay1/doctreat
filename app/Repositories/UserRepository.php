@@ -86,4 +86,10 @@ class UserRepository extends BaseRepository
 
         return $query->where('id', $id)->select('name')->first();
     }
+
+    public function getUserById($id) {
+        $query = $this->model->query();
+
+        return $query->where('id', $id)->first();
+    }
 }

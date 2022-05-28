@@ -29,7 +29,7 @@
             <label class="w-100"> &nbsp;</label>
             <button type="submit" class="btn btn-primary pl-5 pr-5 pl-sm-3 pr-sm-3">Tìm kiếm</button>
             <a href="{{ route('admin.create.storage') }}" class="btn btn-warning ml-2 pl-5 pr-5 pl-sm-3 pr-sm-3">Tạo đơn nhập kho</a>
-            <a href="{{ route('admin.export.storage') }}" class="btn btn-danger ml-2 pl-5 pr-5 pl-sm-3 pr-sm-3">Tạo đơn xuất kho</a>
+            <!-- <a href="{{ route('admin.export.storage') }}" class="btn btn-danger ml-2 pl-5 pr-5 pl-sm-3 pr-sm-3">Tạo đơn xuất kho</a> -->
             <a href="{{ route('admin.history.storage') }}" class="btn btn-success ml-2 pl-5 pr-5 pl-sm-3 pr-sm-3">Kiểm tra đơn</a>
         </div>
     </div>

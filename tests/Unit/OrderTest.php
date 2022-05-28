@@ -2,11 +2,15 @@
 
 namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 use Faker\Factory as Faker;
 use App\Repositories\OrderRepository;
 use App\Repositories\OrderLineRepository;
 use App\Models\Order;
+use App\Models\OrderLine;
+use App\Repositories\PaymentRepository;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class OrderTest extends TestCase
 {
@@ -17,26 +21,93 @@ class OrderTest extends TestCase
     {
         parent::setUp();
         $this->faker = Faker::create();
-        $this->order = [
-            'name_customer' => $this->faker->name_customer,
-            'phone_customer' => $this->faker->phone_customer,
-            'address_customer' => $this->faker->address_customer,
-            'order_date' => $this->faker->order_date,
-            'zip_code' => $this->faker->zip_code,
-            'status' => $this->faker->status,
-        ];
-        $this->orderLine = [
-            'order_id' => $this->faker->order_id,
-            'product_id' => $this->faker->product_id,
-            'quantity' => $this->faker->quantity,
-        ];
+        $this->order = new Order();
+        $this->orderLine = new OrderLine();
         $this->orderRepository = new OrderRepository();
         $this->orderLineRepository = new OrderLineRepository();
-        $this->app->make(\Spatie\Permission\PermissionRegistrar::class)->registerPermissions();
+        $this->paymentRepository = new PaymentRepository();
+    }
+
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+        unset($this->order);
+        unset($this->orderLine);
+    }
+
+    public function test_table_name()
+    {
+        $this->assertEquals('order', $this->order->getTable());
+        $this->assertEquals('order_line', $this->orderLine->getTable());
+    }
+
+    public function test_fillable()
+    {
+        $this->assertEquals([
+            'name_customer',
+            'phone_customer',
+            'address_customer',
+            'zip_code',
+            'order_date',
+            'status'
+        ], $this->order->getFillable());
+
+        $this->assertEquals([
+            'order_id',
+            'product_id',
+            'quantity',
+        ], $this->orderLine->getFillable());
+    }
+
+    public function test_relationship()
+    {
+        $this->order = [
+            'name_customer' => $this->faker->name,
+            'phone_customer' => $this->faker->phoneNumber,
+            'address_customer' => $this->faker->address,
+            'order_date' => $this->faker->date,
+            'zip_code' => $this->faker->randomDigit,
+            'status' => $this->faker->randomDigit,
+        ];
+        $this->orderLine = [
+            'order_id' => $this->faker->randomDigit,
+            'product_id' => $this->faker->randomDigit,
+            'quantity' => $this->faker->randomDigit,
+        ];
+        $this->payment = [
+            'payment_code' => $this->faker->creditCardNumber,
+            'order_id' => $this->faker->randomDigit,
+            'name_customer' => $this->faker->name,
+            'phone_customer' => $this->faker->phoneNumber,
+            'order_date' => $this->faker->date,
+            'cost' => $this->faker->randomDigit,
+            'status_payment' => $this->faker->randomDigit,
+            'address_customer' => $this->faker->address,
+        ];
+        $order = $this->orderRepository->create($this->order);
+        $orderLine = $this->orderLineRepository->create($this->orderLine);
+        $payment = $this->paymentRepository->create($this->payment);
+        $this->assertInstanceOf(HasMany::class, $order->orderLine());
+        $this->assertInstanceOf(HasOne::class, $order->payment());
+        $this->assertEquals('order_id', $order->orderLine()->getForeignKeyName());
+        $this->assertEquals('order_id', $order->payment()->getForeignKeyName());
     }
 
     public function testStore()
     {
+        $this->order = [
+            'name_customer' => $this->faker->name,
+            'phone_customer' => $this->faker->phoneNumber,
+            'address_customer' => $this->faker->address,
+            'order_date' => $this->faker->date,
+            'zip_code' => $this->faker->randomDigit,
+            'status' => $this->faker->randomDigit,
+        ];
+        $this->orderLine = [
+            'order_id' => $this->faker->randomDigit,
+            'product_id' => $this->faker->randomDigit,
+            'quantity' => $this->faker->randomDigit,
+        ];
         $order = $this->orderRepository->create($this->order);
         $orderLine = $this->orderLineRepository->create($this->orderLine);
         $this->assertInstanceOf(Order::class, $order);

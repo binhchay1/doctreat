@@ -124,15 +124,25 @@
                                     <th>Tên khách hàng</th>
                                     <th>Tên bác sĩ</th>
                                     <th>Thời gian</th>
+                                    <th>Trạng Thái</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($data['schedule'] as $schedule)
+                               
                                 <tr>
                                     <td>{{ $schedule->customer_name }}</td>
                                     <td>{{ $schedule->doctor_name }}</td>
                                     <td>{{ $schedule->timer }}</td>
+                                    @if($schedule->status == 1)
+                                    <td>Đã Được Chấp thuận</td>
+                                    @elseif($schedule->status == 2)
+                                    <td>Bị Từ Chối</td>
+                                    @else
+                                    <td>Chưa Kiểm Tra</td>
+                                    @endif
                                 </tr>
+                              
                                 @endforeach
                             </tbody>
                         </table>

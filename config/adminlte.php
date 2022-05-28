@@ -201,12 +201,6 @@ return [
             'text'  => 'Lịch hẹn',
             'route' => 'admin.schedule.index',
             'icon'  => 'nav-icon fas fa-calendar-alt',
-            'can' => 'admin'
-        ],
-        [
-            'text'  => 'Lịch hẹn',
-            'route' => 'admin.schedule.index',
-            'icon'  => 'nav-icon fas fa-calendar-alt',
             'can' => 'doctor'
         ],
         [
