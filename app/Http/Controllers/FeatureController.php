@@ -211,7 +211,7 @@ class FeatureController extends Controller
 
         if (Auth::check()) {
             session()->put('cartItems', $cartItems);
-            return redirect()->route('mail.invoice', ['payment_id' => $payment->id, 'total' => $total]);
+            return redirect()->route('mail.invoice', ['payment_id' => $payment->id, 'total' => $total, 'promotion' => $request->promotion, 'percent' => $request->percent]);
         }
 
         return view('pages.invoice', ['data' => $data, 'cartItems' => $cartItems, 'total' => $total]);

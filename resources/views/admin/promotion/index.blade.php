@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-lg-12 overflow-auto card">
                 <div class="row">
-                    <!-- <div class="col-6 p-3">
+                    <div class="col-6 p-3">
                         <p class="h3">Mã tự động</p>
                         <div class="form-group">
                             <form method="post" action="{{ route('admin.create.promotion') }}">
@@ -44,7 +44,7 @@
                                 @endforeach
                             </ul>
                         </div>
-                    </div> -->
+                    </div>
                     <div class="col-6 p-3">
                         <p class="h3">Mã tự thêm</p>
                         <div class="form-group">
@@ -62,11 +62,11 @@
                                 <li class="list-group-item d-flex justify-content-between">
                                     <p class="mt-3">{{ $add->promotion_code }}</p>
                                     <p class="mt-3">{{ $add->percent }}</p>
-                                    <!-- @if($add->status == 'on')
+                                    @if($add->status == 'on')
                                     <a href="{{ route('change.status.code') }}?type=add&status=off&id={{ $add->id }}" class="btn btn-danger mt-2 mb-2" type="button">Tắt</a>
                                     @elseif($add->status == 'off')
                                     <a href="{{ route('change.status.code') }}?type=add&status=on&id={{ $add->id }}" class="btn btn-success mt-3" type="button">Bật</a>
-                                    @endif -->
+                                    @endif
                                     <a href="{{ route('admin.delete.promotion') }}?id={{ $add->id }}" class="btn btn-danger mt-2 mb-2" type="button">Xóa</a>
                                 </li>
                                 @endforeach

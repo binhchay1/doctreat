@@ -43,7 +43,7 @@
                     </table>
                     <div class="d-flex flex-row-reverse">
                         @if(isset($_GET['total']))
-                        Total: ${{ $_GET['total'] / 100 }} <span>({{ $_GET['promotion'] }})</span> - {{ $_GET]['percent'] }}%
+                        Total: ${{ $_GET['total'] / 100 }} ({{ $_GET['promotion'] }}) - {{ $_GET['percent'] }}%
                         @else
                         @endif
                     </div>

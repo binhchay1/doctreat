@@ -95,6 +95,7 @@ class VNPAYController extends Controller
             $data['users_id'] = $request->users_id;
         }
         //Kiểm tra promotion
+        
         if (isset($request->promotion)) {
             $promotion = $this->promotionRepository->getPromotionByCode($request->promotion);
             //Tính tổng
@@ -219,7 +220,7 @@ class VNPAYController extends Controller
 
         $vnp_Url = $vnp_Url . "?" . $query;
         if (isset($vnp_HashSecret)) {
-            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret); //  
+            $vnpSecureHash =   hash_hmac('sha512', $hashdata, $vnp_HashSecret);  
             $vnp_Url .= 'vnp_SecureHash=' . $vnpSecureHash;
         }
 
@@ -238,16 +239,18 @@ class VNPAYController extends Controller
     public function paymentReturn(Request $request)
     {
         $payment = $this->paymentRepository->getPaymentByCode($request->vnp_TxnRef);
-
+  
         if ($request->session()->has('promotion')) {
             $code = session()->get('promotion');
             $promotion = $this->promotionRepository->getPromotionByCode($code);
             $percent = $promotion->percent;
-            // $this->promotionRepository->updateStatusCodeByCode($code, 'used');
+            $this->promotionRepository->updateStatusCodeByCode($code, 'used');
             $request->session()->forget('promotion');
+            
+            return view('vnpay_php.vnpay_return', compact('code', 'percent'));
         }
 
-        return view('vnpay_php.vnpay_return', compact('code', 'percent'));
+        return view('vnpay_php.vnpay_return');
     }
 
     public function paymentFail(Request $request)
@@ -255,7 +258,7 @@ class VNPAYController extends Controller
         $data = new \stdClass();
 
         $this->paymentRepository->update($request->paymentid, 'Thất bại');
-        // $request->status_payment="Thất bại";
+        $request->status_payment="Thất bại";
         $data->textError = 'Thanh toán thất bại. Vui lòng thử lại';
 
         return view('pages.buy-fail', ['data' => $data]);

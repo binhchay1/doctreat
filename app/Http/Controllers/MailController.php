@@ -34,6 +34,13 @@ class MailController extends Controller
         //chuyển sang trạng thái thành công
         $payment->update(['status_payment' => 'Thành công']);
         $url = $_SERVER['HTTP_HOST'] . '/invoice-check?payment_code=' . $payment->payment_code;
+        if(isset($_GET['promotion'])) {
+            $url = $url . '&promotion=' . $_GET['promotion'];
+        }
+
+        if(isset($_GET['percent'])) {
+            $url = $url . '&percent=' . $_GET['percent'];
+        }
         $mailData['url'] = $url;
 
         $data['name_customer'] = $payment->name_customer;
