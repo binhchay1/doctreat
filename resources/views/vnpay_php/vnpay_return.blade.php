@@ -91,7 +91,14 @@
                     if ($secureHash == $vnp_SecureHash) {
                         if ($_GET['vnp_ResponseCode'] == '00') {
                             echo "<span style='color:blue' id='text-response'>GD Thanh cong</span>";
-                            header("refresh:5; url=/invoice?payment_code=" . $_GET['vnp_TxnRef'] . "&total=" . $_GET['vnp_Amount'] . "&promotion=" . $code . "&percent=" . $percent);
+                            $url = "refresh:5; url=/invoice?payment_code=" . $_GET['vnp_TxnRef'] . "&total=" . $_GET['vnp_Amount'];
+                            if(isset($code)) {
+                                $url = $url . "&promotion=" . $code ;
+                            }
+                            if(isset($percent)) {
+                                $url = $url . "&percent=" . $percent ;
+                            }
+                            header($url);
                         } else {
                             echo "<span style='color:red' id='text-response'>GD Khong thanh cong</span>";
                             header("refresh:5; url=/payment-fail?payment_code=" . $_GET['vnp_TxnRef']);

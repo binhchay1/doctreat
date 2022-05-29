@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Repositories\ProductRepository;
 use App\Repositories\StorageRepository;
 use App\Repositories\StorageHistoryRepository;
-use App\Http\Requests\StorageRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\StorageHistory;
 use Illuminate\Http\Request;

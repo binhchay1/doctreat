@@ -42,7 +42,7 @@ class FeatureController extends Controller
         StorageRepository $storageRepository
     ) {
         $this->productRepository = $productRepository;
-        $this->orderLineRepository=$orderLineRepository;
+        $this->orderLineRepository = $orderLineRepository;
         $this->paymentRepository = $paymentRepository;
         $this->invoiceRepository = $invoiceRepository;
         $this->promotionRepository = $promotionRepository;
@@ -109,7 +109,7 @@ class FeatureController extends Controller
             foreach ($payments as $history) {
                 //liệt kê code
                 $history->code = $history->payment_code;
-                
+
                 $history->date = $history->order_date;
 
                 $history->total_buy = $this->paymentRepository->countTotalBuy($id);
@@ -142,7 +142,7 @@ class FeatureController extends Controller
         $user = Auth::user();
 
         $userPassword = $user->password;
-        
+
         if (!Hash::check($request->current_password, $userPassword)) {
             return back()->withErrors(['current_password' => 'Xác nhận mật khẩu không trùng khớp']);
         }
@@ -178,7 +178,7 @@ class FeatureController extends Controller
     public function invoice(Request $request)
     {
         $cartItems = Cart::getContent();
-        
+
         if ($cartItems->isEmpty()) {
             $url = '/invoice-check?payment_code=' . $request->payment_code;
             return redirect($url);
@@ -190,10 +190,10 @@ class FeatureController extends Controller
             $total = $total + $totalCostByItem;
         }
         Cart::clear();
-        
+
         $payment = $this->paymentRepository->getPaymentByCode($request->payment_code);
         $order_line = $this->orderLineRepository->getOrderLineByOrder($payment->order_id);
-       
+
         foreach ($order_line as $line) {
             $getLastQuantity = $this->storageRepository->getLastQuantity($line->product_id);
             $dataStorage = [
@@ -211,7 +211,10 @@ class FeatureController extends Controller
 
         if (Auth::check()) {
             session()->put('cartItems', $cartItems);
-            return redirect()->route('mail.invoice', ['payment_id' => $payment->id, 'total' => $total, 'promotion' => $request->promotion, 'percent' => $request->percent]);
+            if (isset($request->promotion) and isset($request->percent)) {
+                return redirect()->route('mail.invoice', ['payment_id' => $payment->id, 'total' => $total, 'promotion' => $request->promotion, 'percent' => $request->percent]);
+            }
+            return redirect()->route('mail.invoice', ['payment_id' => $payment->id, 'total' => $total]);
         }
 
         return view('pages.invoice', ['data' => $data, 'cartItems' => $cartItems, 'total' => $total]);
