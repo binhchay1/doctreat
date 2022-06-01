@@ -29,8 +29,8 @@
                                     {{ $item->name }}
                                 </td>
                                 <td>
-                                    <input type="hidden" name="id" value="{{ $item->id }}" id="id-cart-item">
-                                    <input type="number" name="quantity" value="{{ $item->quantity }}" class="w-6 text-center bg-gray-300" onfocusout="addQuantity()" id="number-of-quantity" min="0" max="{{ $item->stock }}"/>
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <input type="number" name="quantity" value="{{ $item->quantity }}" class="w-6 text-center bg-gray-300" onfocusout="addQuantity('{{ $item->id }}')" id="number-of-quantity-{{ $item->id }}" min="0" max="{{ $item->stock }}"/>
                                     <span>(Còn {{ $item->stock }})</span>
                                     <meta name="csrf-token" content="{{ csrf_token() }}">
                                 </td>

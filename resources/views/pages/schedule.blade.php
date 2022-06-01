@@ -25,7 +25,7 @@
                 <div class="card" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">Chọn bác sĩ</h5>
-                        <select class="form-control" style="background-color: white !important;" name="doctor_id" required>
+                        <select class="form-control" style="background-color: white !important;" name="doctor_id" id="doctor_id" onchange="changeTime()" required>
                             @foreach($doctors as $doctor)
                             <option value="{{ $doctor->id }}">{{ $doctor->name }}</option>
                             @endforeach
@@ -36,7 +36,7 @@
                 <div class="card ml-5" style="width: 18rem;">
                     <div class="card-body">
                         <h5 class="card-title">Chọn ngày</h5>
-                        <input type="date" id="date" name="date" class="form-control" name="date" value="{{ $date }}" onchange="changeDate()" required>
+                        <input type="date" id="date" name="date" class="form-control" name="date" value="{{ $date }}" onchange="changeTime()" required>
                     </div>
                 </div>
                 <div class="card ml-5" style="width: 18rem;">

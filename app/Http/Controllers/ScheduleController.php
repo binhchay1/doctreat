@@ -94,7 +94,7 @@ class ScheduleController extends Controller
         }
 
         $data = [];
-        $cancelSchedule = $this->cancelScheduleRepository->get();
+        $cancelSchedule = $this->cancelScheduleRepository->getCancelScheduleByDoctor(Auth::user()->id);
         foreach ($cancelSchedule as $cancel) {
             $calendar = new stdClass();
             $dateTime = explode('-', $cancel->date);
@@ -191,7 +191,7 @@ class ScheduleController extends Controller
             );
 
             $schedules = $this->scheduleRepository->getScheduleByDoctorIdAndDate($doctor_id, $date);
-            $cancelSchedule = $this->cancelScheduleRepository->getCancelScheduleByDate($date);
+            $cancelSchedule = $this->cancelScheduleRepository->getCancelScheduleByDateAndDoctor($date, $doctor_id);
             foreach ($schedules as $schedule) {
                 $user = $this->userRepository->getUserById($schedule->customer_id);
                 $lengthStart = strlen($user->phone);

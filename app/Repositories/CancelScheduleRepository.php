@@ -36,6 +36,12 @@ class CancelScheduleRepository extends BaseRepository
         return $query->where('date', $date)->get();
     }
 
+    public function getCancelScheduleByDateAndDoctor($date, $doctor_id) {
+        $query = $this->model->query();
+
+        return $query->where('date', $date)->where('users_id', $doctor_id)->get();
+    }
+
     public function checkStatusHoursByDate($date, $hours) {
         $query = $this->model->query();
 
@@ -46,5 +52,11 @@ class CancelScheduleRepository extends BaseRepository
         }
 
         return false;
+    }
+
+    public function getCancelScheduleByDoctor($id) {
+        $query = $this->model->query();
+
+        return $query->where('users_id', $id)->get();
     }
 }

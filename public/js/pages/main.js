@@ -2,6 +2,7 @@
     "use strict";
 
     let url = window.location.pathname;
+    let doctor_id = findGetParameter('doctor_id');
     let type = url.slice(1);
 
     if (type == 'about' || type == 'service' || type == 'product' || type == 'schedule' || type == '') {
@@ -9,6 +10,12 @@
             document.getElementById('main').className += " active";
         } else {
             document.getElementById(type).className += " active";
+        }
+
+        if (type == 'schedule') {
+            if (doctor_id != null) {
+                $('#doctor_id').val(doctor_id);
+            }
         }
     }
 
@@ -145,10 +152,10 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
-function addQuantity() {
+function addQuantity(id) {
     let url = '/update-cart';
-    let id = document.getElementById('id-cart-item').value;
-    let quantity = document.getElementById('number-of-quantity').value;
+    let element = 'number-of-quantity-' + id;
+    let quantity = document.getElementById(element).value;
 
     $.ajax({
         url: url,
@@ -162,4 +169,17 @@ function addQuantity() {
         }
     }).done(function (result) {
     });
+}
+
+function findGetParameter(parameterName) {
+    var result = null,
+        tmp = [];
+    location.search
+        .substr(1)
+        .split("&")
+        .forEach(function (item) {
+            tmp = item.split("=");
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+    return result;
 }

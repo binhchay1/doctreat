@@ -258,7 +258,7 @@ var currentUrlWithUser = '';
                 }
             }
         });
-    })
+    });
 
 })(jQuery, window, document);
 
